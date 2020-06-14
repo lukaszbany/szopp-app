@@ -5,6 +5,7 @@ import {Category} from '../../model/category/category.model';
 import {EditCategory} from '../../model/category/edit.category.model';
 import {AddCategory} from '../../model/category/add.category.model';
 import {Success} from '../../model/success/success.model';
+import {share} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class CategoryService {
@@ -12,9 +13,12 @@ export class CategoryService {
   constructor(private http: HttpClient) {
   }
 
+  getCategoriesRequest: Observable<Category[]> = this.http
+    .get<Category[]>('/api/categories/')
+    .pipe(share());
+
   getCategories(): Observable<Category[]> {
-    return this.http
-      .get<Category[]>('/api/categories/');
+    return this.getCategoriesRequest;
   }
 
   getCategory(categoryId: number): Observable<Category> {

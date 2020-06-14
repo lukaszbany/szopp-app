@@ -15,10 +15,14 @@ export class CustomerOrdersComponent implements OnInit {
   constructor(private orderService: OrderService) { }
 
   ngOnInit(): void {
+    this.loadOrders();
+  }
+
+  private loadOrders() {
     this.orderService.getCustomerOrders()
       .subscribe(orders => {
         this.customerOrders = orders;
-      })
+      });
   }
 
   customerHasOrders() {

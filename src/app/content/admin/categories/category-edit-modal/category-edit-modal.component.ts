@@ -33,8 +33,16 @@ export class CategoryEditModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.categoryName = this.data.category.name;
+    this.saveCategoryName();
 
+    this.initCategoryFilter();
+  }
+
+  private saveCategoryName() {
+    this.categoryName = this.data.category.name;
+  }
+
+  private initCategoryFilter() {
     let parentCategory = this.data.availableAsParent.find(cat => cat.id === this.data.category.parentCategoryId);
     this.parentCategoryControl.setValue(parentCategory);
 

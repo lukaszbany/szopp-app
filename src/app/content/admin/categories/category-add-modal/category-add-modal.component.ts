@@ -34,10 +34,17 @@ export class CategoryAddModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.saveProposedParent();
+    this.initCategoryFilter();
+  }
+
+  private saveProposedParent() {
     if (this.data.proposedParent) {
       this.parentCategoryControl.setValue(this.data.proposedParent);
     }
+  }
 
+  private initCategoryFilter() {
     this.filteredCategories = this.parentCategoryControl.valueChanges
       .pipe(
         startWith(''),
