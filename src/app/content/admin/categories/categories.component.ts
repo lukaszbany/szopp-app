@@ -9,6 +9,9 @@ import {EditCategory} from '../../../model/category/edit.category.model';
 import {CategoryAddModalComponent} from './category-add-modal/category-add-modal.component';
 import {CategoryDeleteConfirmationComponent} from './category-delete-confirmation/category-delete-confirmation.component';
 
+const activateMessage = 'Kategoria została włączona';
+const deactivateMessage = 'Kategoria została wyłączona';
+
 @Component({
   selector: 'app-admin-categories',
   templateUrl: './categories.component.html',
@@ -87,21 +90,8 @@ export class AdminCategoriesComponent implements OnInit {
 
   editCategory(category: Category) {
     let availableAsParent = this.getAllCategoriesWithoutCurrent(category);
-
-    let editCategory = new EditCategory(
-      category.id,
-      category.name,
-      category.description,
-      category.parentCategoryId,
-      category.active
-    );
-
-    const dialogRef = this.dialog.open(CategoryEditModalComponent, {
-      data: {category: editCategory, availableAsParent: availableAsParent},
-      disableClose: true,
-      height: '650px',
-      width: '600px',
-    });
+    let editCategory = this.createEditCategory(category);
+    const dialogRef = this.operEditCategoryModal(editCategory, availableAsParent);
 
     dialogRef.afterClosed().subscribe(success => {
       if (success) {
@@ -109,9 +99,27 @@ export class AdminCategoriesComponent implements OnInit {
         this.snackBar.open('Zapisano zmiany', null, {duration: 3000});
       } else {
         this.snackBar.open('Odrzucono zmiany', null, {duration: 3000});
-
       }
     });
+  }
+
+  private operEditCategoryModal(editCategory: EditCategory, availableAsParent: Category[]) {
+    return this.dialog.open(CategoryEditModalComponent, {
+      data: {category: editCategory, availableAsParent: availableAsParent},
+      disableClose: true,
+      height: '650px',
+      width: '600px',
+    });
+  }
+
+  private createEditCategory(category: Category) {
+    return new EditCategory(
+      category.id,
+      category.name,
+      category.description,
+      category.parentCategoryId,
+      category.active
+    );
   }
 
   private getAllCategoriesWithoutCurrent(category: Category) {
@@ -120,13 +128,7 @@ export class AdminCategoriesComponent implements OnInit {
 
   addCategory(proposedParent: Category) {
     let availableAsParent = this.categoryService.findAllCategoriesRecursively(this.allParentCategories);
-
-    const dialogRef = this.dialog.open(CategoryAddModalComponent, {
-      data: {proposedParent: proposedParent, availableAsParent: availableAsParent},
-      disableClose: true,
-      height: '650px',
-      width: '600px',
-    });
+    const dialogRef = this.openAddCategoryModal(proposedParent, availableAsParent);
 
     dialogRef.afterClosed().subscribe(success => {
       if (success) {
@@ -138,29 +140,44 @@ export class AdminCategoriesComponent implements OnInit {
     });
   }
 
+  private openAddCategoryModal(proposedParent: Category, availableAsParent: Category[]) {
+    return this.dialog.open(CategoryAddModalComponent, {
+      data: {proposedParent: proposedParent, availableAsParent: availableAsParent},
+      disableClose: true,
+      height: '650px',
+      width: '600px',
+    });
+  }
+
   setActive(category: Category, active: boolean) {
-    let editCategory = new EditCategory(
-      category.id,
-      category.name,
-      category.description,
-      category.parentCategoryId,
-      active
-    );
+    let editCategory = this.createEditActiveField(category, active);
 
     this.categoryService.editCategory(editCategory)
       .subscribe(() => {
         this.loadCategories();
-        this.snackBar.open(active ? 'Kategoria została włączona' : 'Kategoria została wyłączona', null, {duration: 3000});
+        this.snackBar.open(this.getActivateMessage(active), null, {duration: 3000});
       }, error => {
         this.snackBar.open(error.error.message, null, {duration: 3000});
       });
 
   }
 
+  private getActivateMessage(active: boolean) {
+    return active ? activateMessage : deactivateMessage;
+  }
+
+  private createEditActiveField(category: Category, active: boolean) {
+    return new EditCategory(
+      category.id,
+      category.name,
+      category.description,
+      category.parentCategoryId,
+      active
+    );
+  }
+
   deleteCategory(category: Category) {
-    const dialogRef = this.dialog.open(CategoryDeleteConfirmationComponent, {
-      data: category
-    });
+    const dialogRef = this.openDeleteConfirmationModal(category);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -177,4 +194,9 @@ export class AdminCategoriesComponent implements OnInit {
 
   }
 
+  private openDeleteConfirmationModal(category: Category) {
+    return this.dialog.open(CategoryDeleteConfirmationComponent, {
+      data: category
+    });
+  }
 }

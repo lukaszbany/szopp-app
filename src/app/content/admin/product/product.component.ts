@@ -13,8 +13,8 @@ import {Observable} from 'rxjs';
 import {AddProduct} from '../../../model/product/add.product.model';
 import {EditProduct} from '../../../model/product/edit.product.model';
 import {ApiError} from '../../../model/error/error.model';
-import {CategoryAddModalComponent} from '../categories/category-add-modal/category-add-modal.component';
 import {ProductImagesEditModalComponent} from './product-images-edit-modal/product-images-edit-modal.component';
+import {ValidationError} from '../../../model/error/validation.error.model';
 
 @Component({
   selector: 'app-admin-product',
@@ -95,20 +95,27 @@ export class AdminProductComponent implements OnInit {
 
   private loadProduct() {
     if (this.productId) {
-      this.productService
-        .getProduct(this.productId)
-        .subscribe(product => {
-          this.product = product;
-
-          let category = this.findCategory(product.categoryId);
-          this.categoryControl.setValue(category);
-          this.isLoaded = true;
-        });
-
+      this.loadProductById();
     } else {
-      this.product = new Product();
-      this.isLoaded = true;
+      this.createNewProduct();
     }
+  }
+
+  private loadProductById() {
+    this.productService
+      .getProduct(this.productId)
+      .subscribe(product => {
+        this.product = product;
+
+        let category = this.findCategory(product.categoryId);
+        this.categoryControl.setValue(category);
+        this.isLoaded = true;
+      });
+  }
+
+  private createNewProduct() {
+    this.product = new Product();
+    this.isLoaded = true;
   }
 
   isIncorrect(field: string): boolean {
@@ -142,7 +149,12 @@ export class AdminProductComponent implements OnInit {
   }
 
   private addProduct(stay: boolean) {
-    let addProduct = new AddProduct(
+    let addProduct = this.createAddProduct();
+    this.addNewProduct(addProduct, stay);
+  }
+
+  private createAddProduct() {
+    return new AddProduct(
       this.product.name,
       this.product.description,
       this.product.shortDescription,
@@ -151,26 +163,36 @@ export class AdminProductComponent implements OnInit {
       this.product.inStock,
       this.product.active
     );
+  }
 
+  private addNewProduct(addProduct: AddProduct, stay: boolean) {
     this.productService
       .addProduct(addProduct)
       .subscribe(product => {
-        if (!stay) {
-          this.back();
-        } else {
-          this.router.navigate(['/admin/produkty/' + product.id], { state: { returnUrl: this.returnUrl }})
-          this.ngOnInit();
-        }
-
-        this.snackBar.open("Produkt został dodany", null, {duration: 3000});
+        this.reloadPageOrGetBack(stay, product);
+        this.snackBar.open('Produkt został dodany', null, {duration: 3000});
       }, error => {
         this.handleError(error);
         this.snackBar.open(error.error.message, null, {duration: 3000});
       });
   }
 
+  private reloadPageOrGetBack(stay: boolean, product: Product) {
+    if (!stay) {
+      this.back();
+    } else {
+      this.router.navigate(['/admin/produkty/' + product.id], {state: {returnUrl: this.returnUrl}});
+      this.ngOnInit();
+    }
+  }
+
   private editProduct(stay: boolean) {
-    let editProduct = new EditProduct(
+    let editProduct = this.createEditProduct();
+    this.editSelectedProduct(editProduct, stay);
+  }
+
+  private createEditProduct() {
+    return new EditProduct(
       this.product.id,
       this.product.name,
       this.product.description,
@@ -180,7 +202,9 @@ export class AdminProductComponent implements OnInit {
       this.product.inStock,
       this.product.active
     );
+  }
 
+  private editSelectedProduct(editProduct: EditProduct, stay: boolean) {
     this.productService
       .editProduct(editProduct)
       .subscribe(success => {
@@ -220,15 +244,23 @@ export class AdminProductComponent implements OnInit {
 
   private checkCategoryField(error: ApiError) {
     if (error.validationErrors) {
-      for (let validationError of error.validationErrors) {
-        if (validationError.field === 'categoryId') {
-          this.categoryControl.markAsTouched();
-          this.categoryControl.setErrors({
-            incorrect: true,
-            message: validationError.message
-          });
-        }
-      }
+      this.setValidationErrors(error);
+    }
+  }
+
+  private setValidationErrors(error: ApiError) {
+    for (let validationError of error.validationErrors) {
+      this.addCategoryErrorIfNeeded(validationError);
+    }
+  }
+
+  private addCategoryErrorIfNeeded(validationError: ValidationError) {
+    if (validationError.field === 'categoryId') {
+      this.categoryControl.markAsTouched();
+      this.categoryControl.setErrors({
+        incorrect: true,
+        message: validationError.message
+      });
     }
   }
 

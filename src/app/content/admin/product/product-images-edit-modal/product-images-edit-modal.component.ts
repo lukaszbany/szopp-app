@@ -38,8 +38,16 @@ export class ProductImagesEditModalComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.initFields();
+    this.loadProduct();
+  }
+
+  private initFields() {
     this.loaded = false;
     this.fileDescription = '';
+  }
+
+  private loadProduct() {
     this.productService
       .getProduct(this.productId)
       .subscribe(product => {
@@ -52,10 +60,6 @@ export class ProductImagesEditModalComponent implements OnInit {
 
   close(): void {
     this.dialogRef.close();
-  }
-
-  submit() {
-    console.log(this.product);
   }
 
   drop(event: CdkDragDrop<Image[]>) {
@@ -72,44 +76,56 @@ export class ProductImagesEditModalComponent implements OnInit {
     let newOrder = event.currentIndex;
 
     if (previousOrder !== newOrder) {
-      this.imageService
-        .editImageOrder(this.productId, imageId, newOrder)
-        .subscribe(success => {
-          moveItemInArray(this.product.images, previousOrder, newOrder);
-          this.snackBar.open(success.message, null, {duration: 3000});
-        }, error => {
-          this.dialogRef.close();
-          this.snackBar.open(error.error.message, null, {duration: 3000});
-        });
+      this.changeImageOrder(imageId, newOrder, previousOrder);
     }
+  }
+
+  private changeImageOrder(imageId, newOrder: number, previousOrder: number) {
+    this.imageService
+      .editImageOrder(this.productId, imageId, newOrder)
+      .subscribe(success => {
+        moveItemInArray(this.product.images, previousOrder, newOrder);
+        this.snackBar.open(success.message, null, {duration: 3000});
+      }, error => {
+        this.dialogRef.close();
+        this.snackBar.open(error.error.message, null, {duration: 3000});
+      });
   }
 
   private deleteImage(event: CdkDragDrop<Image[]>) {
     let imageId = event.item.data.id;
     let filename = event.item.data.filename;
+    const dialogRef = this.openImageDeleteConfirmationModal(filename);
+    this.handleModalClose(dialogRef, imageId);
+  }
 
-    const dialogRef = this.dialog.open(ImageDeleteConfirmationComponent, {
+  private openImageDeleteConfirmationModal(filename) {
+    return this.dialog.open(ImageDeleteConfirmationComponent, {
       data: {product: this.product, filename: filename}
     });
+  }
 
+  private handleModalClose(dialogRef: MatDialogRef<ImageDeleteConfirmationComponent, any>, imageId) {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.imageService
-          .deleteImage(this.productId, imageId)
-          .subscribe(success => {
-            this.ngOnInit();
-            this.snackBar.open(success.message, null, {duration: 3000});
-          }, error => {
-            this.snackBar.open(error.error.message, null, {duration: 3000});
-          });
+        this.deleteSelectedImage(imageId);
       }
     });
+  }
 
+  private deleteSelectedImage(imageId) {
+    this.imageService
+      .deleteImage(this.productId, imageId)
+      .subscribe(success => {
+        this.ngOnInit();
+        this.snackBar.open(success.message, null, {duration: 3000});
+      }, error => {
+        this.snackBar.open(error.error.message, null, {duration: 3000});
+      });
   }
 
   dragging(isDragging: boolean) {
     this.isDragging = isDragging;
-    console.log(this.isDragging);
   }
 
   checkEntered(event: CdkDragEnter) {
@@ -120,15 +136,19 @@ export class ProductImagesEditModalComponent implements OnInit {
     let eventTarget = (<HTMLInputElement> event.target);
 
     if (eventTarget.files) {
-      this.imageService
-        .addImage(this.productId, eventTarget.files[0], this.fileDescription)
-        .subscribe(success => {
-          this.ngOnInit();
-          this.snackBar.open(success.message, null, {duration: 3000});
-        }, error => {
-          this.snackBar.open(error.error.message, null, {duration: 3000});
-        });
+      this.addImageFromTarget(eventTarget);
     }
 
+  }
+
+  private addImageFromTarget(eventTarget: HTMLInputElement) {
+    this.imageService
+      .addImage(this.productId, eventTarget.files[0], this.fileDescription)
+      .subscribe(success => {
+        this.ngOnInit();
+        this.snackBar.open(success.message, null, {duration: 3000});
+      }, error => {
+        this.snackBar.open(error.error.message, null, {duration: 3000});
+      });
   }
 }

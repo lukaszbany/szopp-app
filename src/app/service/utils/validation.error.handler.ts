@@ -8,12 +8,20 @@ export class ValidationErrorHandler {
 
   static saveErrors(form: NgForm, error: ApiError) {
     if (error.validationErrors) {
-      for (let validationError of error.validationErrors) {
-        if (validationError.field && form.controls[validationError.field]) {
-          this.setFieldError(form, validationError);
-          this.markFieldAsTouched(form, validationError);
-        }
-      }
+      this.setValidationErrors(error, form);
+    }
+  }
+
+  private static setValidationErrors(error: ApiError, form: NgForm) {
+    for (let validationError of error.validationErrors) {
+      this.addFormError(validationError, form);
+    }
+  }
+
+  private static addFormError(validationError: ValidationError, form: NgForm) {
+    if (validationError.field && form.controls[validationError.field]) {
+      this.setFieldError(form, validationError);
+      this.markFieldAsTouched(form, validationError);
     }
   }
 

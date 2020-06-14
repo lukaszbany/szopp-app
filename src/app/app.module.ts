@@ -42,7 +42,6 @@ import {ErrorInterceptor} from './interceptor/error.interceptor';
 import {CustomerOrdersComponent} from './content/customer/customer-orders/customer-orders.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {CheckoutComponent} from './content/customer/checkout/checkout.component';
-import {ShipmentAddressComponent} from './content/customer/checkout/shipment-address/shipment-address.component';
 import {CartSummaryComponent} from './content/customer/checkout/cart-summary/cart-summary.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import {OrderStatusPipe} from './pipe/order.status.pipe';
@@ -102,7 +101,6 @@ registerLocaleData(localePL);
     CustomerDataComponent,
     CustomerOrdersComponent,
     CheckoutComponent,
-    ShipmentAddressComponent,
     CartSummaryComponent,
     AdminComponent,
     UsersComponent,

@@ -169,16 +169,7 @@ export class AdminProductsComponent implements OnInit {
   }
 
   setActive(product: Product, active: boolean) {
-    let editProduct = new EditProduct(
-      product.id,
-      product.name,
-      product.description,
-      product.shortDescription,
-      product.price,
-      product.categoryId,
-      product.inStock,
-      active
-    );
+    let editProduct = this.createEditProductActivation(product, active);
 
     this.productService.editProduct(editProduct)
       .subscribe(() => {
@@ -188,6 +179,19 @@ export class AdminProductsComponent implements OnInit {
       }, error => {
         this.snackBar.open(error.error.message, null, {duration: 3000});
       });
+  }
+
+  private createEditProductActivation(product: Product, active: boolean) {
+    return new EditProduct(
+      product.id,
+      product.name,
+      product.description,
+      product.shortDescription,
+      product.price,
+      product.categoryId,
+      product.inStock,
+      active
+    );
   }
 
   editProduct(product: Product) {

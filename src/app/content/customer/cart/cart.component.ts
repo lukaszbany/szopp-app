@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Order} from '../../../model/order/order.model';
 import {CartService} from '../../../service/cart/cart.service';
 import {OrderItem} from '../../../model/order/order.item.model';
-import {ProductService} from '../../../service/product/product.service';
 import {ImageService} from '../../../service/product/image.service';
 
 @Component({
@@ -19,11 +18,16 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadCart();
+  }
+
+  private loadCart() {
     this.cartService.cartChanged
       .subscribe(cart => {
         this.cart = cart;
         this.isCartLoaded = true;
       });
+
     this.cartService.getCart();
   }
 

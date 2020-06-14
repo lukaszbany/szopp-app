@@ -12,14 +12,15 @@ export class CartService {
 
   private cart: Order;
   cartChanged = new Subject<Order>();
+  getCartRequest: Observable<Order> = this.http
+    .get<Order>('/api/cart/')
+    .pipe(share());
 
   constructor(private http: HttpClient) {
   }
 
   getCart() {
-    this.http
-      .get<Order>('/api/cart/')
-      .pipe(share())
+    this.getCartRequest
       .subscribe(cart => {
         this.cart = cart;
         this.cartChanged.next(cart);

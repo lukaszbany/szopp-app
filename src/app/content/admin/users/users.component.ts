@@ -3,7 +3,7 @@ import {UserService} from '../../../service/user/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {User} from '../../../model/user/user.model';
 import {Role} from '../../../model/user/role.model';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AddRoleConfirmationComponent} from './add-role-confirmation/add-role-confirmation.component';
 import {AuthService} from '../../../service/auth/auth.service';
 import {RemoveUserConfirmationComponent} from './remove-user-confirmation/remove-user-confirmation.component';
@@ -37,10 +37,17 @@ export class UsersComponent implements OnInit {
   }
 
   addRoleDialog(user: User, roleName: string) {
-    const dialogRef = this.dialog.open(AddRoleConfirmationComponent, {
+    const dialogRef = this.openAddRoleModal(roleName);
+    this.handleAddRoleModalClose(dialogRef, user);
+  }
+
+  private openAddRoleModal(roleName: string) {
+    return this.dialog.open(AddRoleConfirmationComponent, {
       data: Role[roleName]
     });
+  }
 
+  private handleAddRoleModalClose(dialogRef: MatDialogRef<AddRoleConfirmationComponent, any>, user: User) {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.changeUserRole(user, result);
@@ -64,11 +71,18 @@ export class UsersComponent implements OnInit {
     return username === user.username;
   }
 
-  deleteUserDialog(user: User) {
-    const dialogRef = this.dialog.open(RemoveUserConfirmationComponent, {
+  deleteUserModal(user: User) {
+    const dialogRef = this.openDeleteUserModal(user);
+    this.handleDeleteUserModalClose(dialogRef, user);
+  }
+
+  private openDeleteUserModal(user: User) {
+    return this.dialog.open(RemoveUserConfirmationComponent, {
       data: user
     });
+  }
 
+  private handleDeleteUserModalClose(dialogRef: MatDialogRef<RemoveUserConfirmationComponent, any>, user: User) {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.deleteUser(user);

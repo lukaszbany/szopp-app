@@ -32,7 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             break;
         }
 
-        console.log(err);
+        // console.log(err);
         throw err;
       }));
   }
