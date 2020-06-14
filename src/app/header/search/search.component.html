@@ -1,0 +1,11 @@
+<form class="form-inline my-2 my-lg-0 float-right search" #search="ngForm" (ngSubmit)="searchProducts(); search.resetForm()">
+  <mat-form-field appearance="legacy" color="primary">
+    <mat-label>Znajdź produkt</mat-label>
+    <label>
+      <input ngModel name="searchQuery" matInput class="search">
+    </label>
+  </mat-form-field>
+  <button mat-mini-fab color="primary" class="btn btn-outline-light my-2 my-sm-0 ml-2">
+    <mat-icon>search</mat-icon>
+  </button>
+</form>

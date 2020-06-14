@@ -1,0 +1,164 @@
+<nav aria-label="breadcrumb" *ngIf="category">
+  <ol class="breadcrumb">
+    <button class="mr-3"
+            mat-flat-button
+            color="primary"
+            routerLink="/admin/produkty"
+            ngbTooltip="Pokaż wszystkie produkty"
+            *ngIf="category.parentCategoryId">
+      <span class="material-icons">list</span>
+    </button>
+    <button class="mr-3"
+            mat-flat-button
+            color="primary"
+            routerLink="/admin/kategorie/{{category.parentCategoryId}}/produkty"
+            ngbTooltip="Wróć do kategorii nadrzędnej"
+            *ngIf="category.parentCategoryId">
+      <span class="material-icons">undo</span>
+    </button>
+    <button class="mr-3"
+            mat-flat-button
+            color="primary"
+            routerLink="/admin/produkty"
+            ngbTooltip="Wróć do kategorii nadrzędnej"
+            *ngIf="!category.parentCategoryId">
+      <span class="material-icons">undo</span>
+    </button>
+    <li class="breadcrumb-item" *ngFor="let category of categoryTree"
+        [class.active]="category.id === category.id">
+      {{category.name}}
+    </li>
+  </ol>
+</nav>
+
+<nav aria-label="breadcrumb" *ngIf="!category">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" *ngIf="!searchQueryParam">
+      Wszystkie produkty w sklepie
+    </li>
+    <li class="breadcrumb-item" *ngIf="searchQueryParam">
+      Wyniki wyszukiwania dla "{{searchQueryParam}}"
+    </li>
+  </ol>
+</nav>
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th scope="col" class="align-middle">ID</th>
+    <th scope="col" class="align-middle">
+      Nazwa
+      <button class="mr-3"
+              mat-icon-button
+              color="primary"
+              ngbTooltip="Filtruj po nazwie"
+              [matMenuTriggerFor]="productNameSearch">
+        <span class="material-icons">search</span>
+      </button>
+      <mat-menu #productNameSearch="matMenu" [overlapTrigger]="false">
+        <form (ngSubmit)="searchProducts()">
+          <mat-form-field (click)="stopPropagation($event)">
+            <input
+              matInput
+              name="searchQuery"
+              [(ngModel)]="searchQuery"
+              (click)="stopPropagation($event)"
+              placeholder="Nazwa produktu"
+              class="search-input">
+          </mat-form-field>
+          <button class="search-query" mat-icon-button type="button" color="primary" (click)="searchProducts()"><span
+            class="material-icons">search</span></button>
+        </form>
+      </mat-menu>
+    </th>
+    <th scope="col" class="align-middle">
+      Kategoria
+      <button class="mr-3"
+              mat-icon-button
+              color="primary"
+              ngbTooltip="Filtruj po kategorii"
+              [matMenuTriggerFor]="categorySearch">
+        <span class="material-icons">search</span>
+      </button>
+      <mat-menu #categorySearch="matMenu" (click)="stopPropagation($event)" class="category-filter">
+        <form (ngSubmit)="filterByCategory()">
+          <mat-form-field (click)="stopPropagation($event)" class="category-filter">
+            <input type="text"
+                   aria-label="Number"
+                   matInput
+                   [formControl]="categoryControl"
+                   [matAutocomplete]="auto"
+                   (click)="stopPropagation($event)"
+                   placeholder="Nazwa kategorii"
+                   class="category-filter">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let cat of filteredCategories | async" [value]="cat">
+                {{cat.name}} <span class="badge badge-pill badge-primary">ID: {{cat.id}}</span>
+              </mat-option>
+            </mat-autocomplete>
+            <button class="search-query" mat-icon-button type="button" color="primary" (click)="filterByCategory()">
+              <span class="material-icons">search</span>
+            </button>
+          </mat-form-field>
+        </form>
+      </mat-menu>
+    </th>
+    <th scope="col" class="align-middle d-none d-sm-table-cell">Dostępne</th>
+    <th scope="col" class="align-middle d-none d-sm-table-cell">Cena</th>
+    <th scope="col" class="align-middle d-none d-sm-table-cell">Włączony</th>
+    <th scope="col" class="align-middle">Akcje</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let product of products" [class.table-danger]="!product.active">
+    <td class="align-middle">{{product.id}}</td>
+    <td class="align-middle">{{product.name}}</td>
+    <td class="align-middle">{{findCategoryName(product.categoryId)}}</td>
+    <td class="align-middle d-none d-sm-table-cell">{{product.inStock}}</td>
+    <td class="align-middle d-none d-sm-table-cell">{{product.price | pln}}</td>
+    <td class="align-middle d-none d-sm-table-cell">
+      <span class="material-icons" *ngIf="product.active">check_box</span>
+      <span class="material-icons" *ngIf="!product.active">check_box_outline_blank</span>
+    </td>
+    <td class="align-middle">
+      <button
+        mat-mini-fab
+        color="primary"
+        *ngIf="!product.active"
+        ngbTooltip="Włącz"
+        (click)="setActive(product, true)">
+        <span class="material-icons">power_settings_new</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="accent"
+        *ngIf="product.active"
+        ngbTooltip="Wyłącz"
+        (click)="setActive(product, false)">
+        <span class="material-icons">power_settings_new</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="primary"
+        ngbTooltip="Edytuj"
+        (click)="editProduct(product)">
+        <span class="material-icons">edit</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="accent"
+        ngbTooltip="Usuń"
+        (click)="deleteProduct(product)">
+        <span class="material-icons">delete</span>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="bottom-space"></div>
+
+<div class="add-button">
+  <button mat-fab class="add-button" (click)="addProduct()" ngbTooltip="Nowy produkt">
+    <span class="material-icons">add</span>
+  </button>
+</div>

@@ -1,0 +1,34 @@
+span.selected {
+  color: #ff4081;
+  font-weight: bold;
+}
+
+textarea.mat-input-element {
+  height: 300px;
+  resize: none;
+}
+
+table {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+input {
+  width: 50%;
+}
+
+div.button-wrapper {
+  float: right;
+}
+
+div.button-wrapper button {
+  margin-left: 10px;
+  margin-top: 45px;
+}
+
+button:focus {
+  outline: 0;
+}

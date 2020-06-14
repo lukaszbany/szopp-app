@@ -1,0 +1,78 @@
+<p>Edytuj kategorię {{categoryName}}</p>
+
+<form #categoryEditForm="ngForm">
+  <table>
+
+    <tr>
+      <td>
+        <mat-form-field class="small-field">
+          <mat-label>ID</mat-label>
+          <input matInput name="id" [(ngModel)]="data.category.id" disabled>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field class="field">
+          <mat-label>Nazwa kategorii</mat-label>
+          <input matInput name="name" [(ngModel)]="data.category.name">
+          <mat-error *ngIf="isIncorrect('name')">
+            {{getErrorMessage('name')}}
+          </mat-error>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <mat-form-field class="area">
+          <mat-label>Opis kategorii</mat-label>
+          <textarea
+            matInput
+            name="description"
+            [(ngModel)]="data.category.description"
+            draggable="false">
+          </textarea>
+          <mat-error *ngIf="isIncorrect('description')">
+            {{getErrorMessage('description')}}
+          </mat-error>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <mat-slide-toggle name="isActive" [(ngModel)]="data.category.active"></mat-slide-toggle>
+        <span [class.selected]="data.category.active"> Aktywna</span>
+      </td>
+      <td>
+        <mat-form-field class="field">
+          <input type="text"
+                 placeholder="Nadrzędna"
+                 aria-label="Number"
+                 matInput
+                 [formControl]="parentCategoryControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let cat of filteredCategories | async" [value]="cat">
+              {{cat.name}} <span class="badge badge-pill badge-primary">ID: {{cat.id}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </td>
+    </tr>
+
+  </table>
+  <div class="button-wrapper">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="close()">
+      Anuluj
+    </button>
+    <button
+      mat-flat-button
+      color="accent"
+      (click)="submit()">
+      Zapisz dane
+    </button>
+  </div>
+</form>

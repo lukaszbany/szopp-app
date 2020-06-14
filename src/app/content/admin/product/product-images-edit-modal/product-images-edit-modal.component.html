@@ -1,0 +1,71 @@
+<div *ngIf="loaded">
+  <!--  <p class="title"></p>-->
+  <div class="row title">
+    <div class="col-10">
+      <p>Edycja zdjęć dla {{product.name}} <span
+        class="badge badge-pill badge-primary">ID: {{product.id}}</span></p>
+    </div>
+    <div class="col-2">
+      <button
+        class="close-button"
+        mat-icon-button
+        (click)="close()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+  </div>
+
+
+  <div cdkDropListGroup>
+    <div
+      cdkDropList
+      id="images"
+      [cdkDropListData]="product.images"
+      cdkDropListOrientation="horizontal"
+      class="image-list"
+      (cdkDropListDropped)="drop($event)">
+      <div
+        #imageDrag
+        class="image-box"
+        *ngFor="let image of product.images"
+        cdkDrag
+        [cdkDragData]="image"
+        (cdkDragStarted)="dragging(true)"
+        (cdkDragEnded)="dragging(false)"
+        (cdkDragEntered)="checkEntered($event)">
+        <img src="{{getImagePath(image)}}" alt="{{image.description}}" class="image-preview">
+      </div>
+    </div>
+
+    <div cdkDropList
+         [class.invisible]="!isDragging"
+         id="toDelete"
+         cdkDropListOrientation="horizontal"
+         class="image-list delete-drop-list col-8"
+         (cdkDropListDropped)="drop($event)">
+      <span class="material-icons delete-icon" [class.over-delete-field]="isOverDeleteField">delete</span>
+    </div>
+
+    <div class="add-button">
+      <mat-form-field class="image-description d-none d-sm-inline-block">
+        <mat-label>Opis dodawanego pliku</mat-label>
+        <input matInput name="fileDescription" [(ngModel)]="fileDescription">
+      </mat-form-field>
+      <button mat-fab class="add-button" ngbTooltip="Dodaj zdjęcie" (click)="file.click()">
+        <input type="file"
+               id="file"
+               hidden
+               #file
+               accept="image/jpeg, image/jpg, image/png, image/webp"
+               (change)="addImage($event)">
+        <span class="material-icons">add</span>
+      </button>
+    </div>
+
+
+  </div>
+</div>
+<div class="h-100" *ngIf="!loaded">
+  <app-spinner></app-spinner>
+</div>

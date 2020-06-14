@@ -1,0 +1,33 @@
+td.company-wrapper {
+  height: 96px;
+}
+
+span.selected {
+  color: #ff4081;
+  font-weight: bold;
+}
+
+mat-form-field {
+  width: 100%
+}
+
+mat-expansion-panel.mat-expansion-panel.is-company {
+  box-shadow: none;
+}
+
+mat-expansion-panel.mat-expansion-panel.is-company mat-expansion-panel-header.mat-expansion-panel-header {
+  padding: 0 0;
+}
+
+mat-expansion-panel.mat-expansion-panel.is-company mat-slide-toggle.mat-slide-toggle {
+  margin: 0 10px;
+}
+
+mat-expansion-panel.mat-expansion-panel.is-company mat-form-field {
+  height: 80px;
+}
+
+::ng-deep mat-expansion-panel.mat-expansion-panel.is-company .mat-expansion-panel-body {
+  padding: 0 0 !important;
+}
+

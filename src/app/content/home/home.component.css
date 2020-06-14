@@ -1,0 +1,19 @@
+.background {
+  background-image: url(../../../assets/img/home-bg.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #464646;
+  height: 100%;
+}
+
+.home {
+  text-align: center;
+  letter-spacing: 3px;
+  height: 100%;
+}
+
+.button-wrapper {
+  margin: 15px 0;
+  width: 100%;
+}

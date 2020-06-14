@@ -1,0 +1,21 @@
+hr {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+@media (min-width: 1230px) {
+  button {
+    letter-spacing: 3px;
+  }
+}
+
+@media (max-width: 1230px) {
+  button {
+    letter-spacing: 2px;
+    padding: 10px;
+  }
+}
+
+button:focus {
+  outline: 0;
+}

@@ -1,0 +1,11 @@
+div {
+  float: right;
+}
+
+div button {
+  margin-left: 10px;
+}
+
+button:focus {
+  outline: 0;
+}

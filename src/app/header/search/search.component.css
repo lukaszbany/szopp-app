@@ -1,0 +1,33 @@
+/* input color class */
+::ng-deep input.mat-input-element.search {
+  color: white;
+}
+
+/* underline border color on focused */
+::ng-deep form.search .mat-focused .mat-form-field-underline .mat-form-field-ripple {
+  background-color: white !important;
+}
+
+form.search .ng-tns-c123-0 {
+  color: white;
+}
+
+/* Change label color on focused */
+::ng-deep form.search .mat-focused .mat-form-field-label {
+  color: white !important;
+}
+
+/* Change label color on focused */
+form.search mat-label {
+  color: white !important;
+}
+
+::ng-deep form.search .mat-form-field-underline {
+  background-color: white !important;
+}
+
+/*.mat-list-option:not(.mat-list-item-disabled):hover,*/
+/*.mat-nav-list .mat-list-item:not(.mat-list-item-disabled):hover,*/
+/*.mat-action-list .mat-list-item:not(.mat-list-item-disabled):hover {*/
+/*  background: ;*/
+/*}*/

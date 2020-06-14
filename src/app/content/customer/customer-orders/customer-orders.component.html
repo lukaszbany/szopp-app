@@ -1,0 +1,88 @@
+<div class="container">
+  <h3>Złożone zamówienia:</h3>
+  <mat-accordion class="example-headers-align" *ngIf="customerHasOrders()">
+    <mat-expansion-panel *ngFor="let order of customerOrders">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Zamówienie numer {{order.id}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{order.status | orderStatus}}
+          <mat-icon>shopping_cart</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <p>Zamówienie z dnia {{order.dateCreated | date: 'dd.MM.yyyy'}}.
+        <span *ngIf="order.dateSent">
+          Wysłano dnia {{order.dateSent | date: 'dd.MM.yyyy'}}.
+        </span>
+      </p>
+      <ul class="list-unstyled">
+        <li>Adres do wysyłki:</li>
+        <li>{{order.shipmentAddress.firstName}} {{order.shipmentAddress.lastName}}</li>
+        <li *ngIf="order.shipmentAddress.type === 'COMPANY'">{{order.shipmentAddress.companyName}} {{order.shipmentAddress.nip}}</li>
+        <li>{{order.shipmentAddress.zipCode}} {{order.shipmentAddress.city}}</li>
+        <li>{{order.shipmentAddress.street}}</li>
+        <li>E-mail: {{order.shipmentAddress.email}}</li>
+        <li *ngIf="order.shipmentAddress.phone">Telefon: {{order.shipmentAddress.phone}}</li>
+      </ul>
+
+
+      <table class="table d-none d-md-table">
+        <thead>
+        <tr>
+          <th scope="col" class="align-middle">Produkt</th>
+          <th scope="col" class="align-middle">Ilość</th>
+          <th scope="col" class="align-middle">Cena</th>
+          <th scope="col" class="align-middle">Razem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let orderItem of order.orderItems">
+          <td class="align-middle">{{orderItem.product.name}}</td>
+          <td class="align-middle">
+            <span class="product-quantity">{{orderItem.quantity}}</span>
+          </td>
+          <td class="align-middle">{{orderItem.price | pln}}</td>
+          <td class="align-middle">{{orderItem.totalPrice | pln}}</td>
+        </tr>
+        <tr class="table-active">
+          <td></td>
+          <td></td>
+          <td>Razem:</td>
+          <td>{{order.totalPrice | pln}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table class="table d-md-none">
+        <thead>
+        <tr>
+          <th scope="col" class="align-middle">Produkt</th>
+          <th scope="col" class="align-middle">Razem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let orderItem of order.orderItems">
+          <td class="align-middle">
+            <div>{{orderItem.product.name}}</div>
+            <div>{{orderItem.quantity}} x {{orderItem.price | pln}}</div>
+          </td>
+          <td>
+            {{orderItem.totalPrice | pln}}
+          </td>
+        </tr>
+        <tr class="table-active">
+          <td>Razem:</td>
+          <td>{{order.totalPrice | pln}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
+  <p *ngIf="!customerHasOrders()">Brak zamówień.</p>
+
+</div>

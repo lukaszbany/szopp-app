@@ -1,0 +1,235 @@
+<table class="table table-hover d-none d-lg-table">
+  <thead>
+  <tr>
+    <th scope="col" class="align-middle">ID</th>
+    <th scope="col" class="align-middle">
+      Szczegóły
+    </th>
+    <th scope="col" class="align-middle">
+      <div>
+        <mat-form-field class="status-filter">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="status" (selectionChange)="filterStatus()">
+            <mat-option value="">Wszystkie</mat-option>
+            <mat-option value="CANCELED">Anulowane</mat-option>
+            <mat-option value="SUBMITTED">Oczekuje na wysyłkę</mat-option>
+            <mat-option value="SENT">Wysłane</mat-option>
+            <mat-option value="COMPLETED">Zakończone</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </th>
+    <th scope="col" class="align-middle">Suma</th>
+    <th scope="col" class="align-middle">Akcje</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let order of orders" [class.table-danger]="isCanceled(order)" [class.table-success]="isCompleted(order)">
+    <td class="align-middle">{{order.id}}</td>
+    <td class="align-middle">
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Rozwiń, żeby zobaczyć szczegóły.
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <p>Zamówienie z dnia {{order.dateCreated | date: 'dd-MM-yyyy'}}.
+          <span *ngIf="order.dateSent">
+          Wysłano dnia {{order.dateSent | date: 'dd-MM-yyyy'}}.
+        </span>
+        </p>
+        <ul class="list-unstyled" *ngIf="order.shipmentAddress">
+          <li>Adres do wysyłki:</li>
+          <li>{{order.shipmentAddress.firstName}} {{order.shipmentAddress.lastName}}</li>
+          <li
+            *ngIf="order.shipmentAddress.type === 'COMPANY'">{{order.shipmentAddress.companyName}} {{order.shipmentAddress.nip}}</li>
+          <li>{{order.shipmentAddress.zipCode}} {{order.shipmentAddress.city}}</li>
+          <li>{{order.shipmentAddress.street}}</li>
+          <li>E-mail: {{order.shipmentAddress.email}}</li>
+          <li *ngIf="order.shipmentAddress.phone">Telefon: {{order.shipmentAddress.phone}}</li>
+        </ul>
+
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col" class="align-middle">Produkt</th>
+            <th scope="col" class="align-middle">Ilość</th>
+            <th scope="col" class="align-middle">Cena</th>
+            <th scope="col" class="align-middle">Razem</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let orderItem of order.orderItems">
+            <td class="align-middle">{{orderItem.product.name}}</td>
+            <td class="align-middle">
+              <span class="product-quantity">{{orderItem.quantity}}</span>
+            </td>
+            <td class="align-middle">{{orderItem.price | pln}}</td>
+            <td class="align-middle">{{orderItem.totalPrice | pln}}</td>
+          </tr>
+          <tr class="table-active">
+            <td></td>
+            <td></td>
+            <td>Razem:</td>
+            <td>{{order.totalPrice | pln}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </mat-expansion-panel>
+
+
+    </td>
+    <td class="align-middle">{{order.status | orderStatus}}</td>
+    <td class="align-middle">{{order.totalPrice | pln}}</td>
+    <td class="align-middle">
+      <button
+        mat-mini-fab
+        color="warn"
+        ngbTooltip="Anuluj"
+        *ngIf="canBeCanceled(order)"
+        (click)="cancel(order)">
+        <span class="material-icons">clear</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="primary"
+        ngbTooltip="Wyślij"
+        *ngIf="canBeSent(order)"
+        (click)="send(order)">
+        <span class="material-icons">send</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="primary"
+        ngbTooltip="Zakończ"
+        *ngIf="canBeCompleted(order)"
+        (click)="complete(order)">
+        <span class="material-icons">done</span>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<table class="table table-hover d-lg-none">
+  <thead>
+  <tr>
+    <th scope="col" class="align-middle">
+      <div>
+        <mat-form-field class="status-filter">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="status" (selectionChange)="filterStatus()">
+            <mat-option value="">Wszystkie</mat-option>
+            <mat-option value="CANCELED">Anulowane</mat-option>
+            <mat-option value="SUBMITTED">Oczekuje na wysyłkę</mat-option>
+            <mat-option value="SENT">Wysłane</mat-option>
+            <mat-option value="COMPLETED">Zakończone</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let order of orders" [class.table-danger]="isCanceled(order)" [class.table-success]="isCompleted(order)">
+    <td class="align-middle">
+
+      <mat-expansion-panel class="order-details">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Zamówienie {{order.id}} - {{order.status | orderStatus}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <p class="order-details">Zamówienie z dnia {{order.dateCreated | date: 'dd-MM-yyyy'}}.
+          <span *ngIf="order.dateSent">
+          Wysłano dnia {{order.dateSent | date: 'dd-MM-yyyy'}}.
+        </span>
+        </p>
+        <ul class="list-unstyled order-details" *ngIf="order.shipmentAddress">
+          <li>Adres do wysyłki:</li>
+          <li>{{order.shipmentAddress.firstName}} {{order.shipmentAddress.lastName}}</li>
+          <li
+            *ngIf="order.shipmentAddress.type === 'COMPANY'">{{order.shipmentAddress.companyName}} {{order.shipmentAddress.nip}}</li>
+          <li>{{order.shipmentAddress.zipCode}} {{order.shipmentAddress.city}}</li>
+          <li>{{order.shipmentAddress.street}}</li>
+          <li>E-mail: {{order.shipmentAddress.email}}</li>
+          <li *ngIf="order.shipmentAddress.phone">Telefon: {{order.shipmentAddress.phone}}</li>
+        </ul>
+
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col" class="align-middle">Produkt</th>
+            <th scope="col" class="align-middle d-none d-sm-table-cell">Ilość</th>
+            <th scope="col" class="align-middle d-none d-sm-table-cell">Cena</th>
+            <th scope="col" class="align-middle d-sm-none">Ilość/Cena</th>
+            <th scope="col" class="align-middle">Razem</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let orderItem of order.orderItems">
+            <td class="align-middle">{{orderItem.product.name}}</td>
+            <td class="align-middle d-none d-sm-table-cell">
+              <span class="product-quantity">{{orderItem.quantity}}</span>
+            </td>
+            <td class="align-middle d-none d-sm-table-cell">{{orderItem.price | pln}}</td>
+            <td class="align-middle d-sm-none">
+              <div>{{orderItem.quantity}} x</div>
+              <div>{{orderItem.price | pln}}</div>
+            </td>
+            <td class="align-middle">{{orderItem.totalPrice | pln}}</td>
+          </tr>
+          <tr class="table-active">
+            <td></td>
+            <td class="d-none d-sm-table-cell"></td>
+            <td>Razem:</td>
+            <td>{{order.totalPrice | pln}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div>
+          <button
+            mat-mini-fab
+            color="warn"
+            ngbTooltip="Anuluj"
+            *ngIf="canBeCanceled(order)"
+            (click)="cancel(order)">
+            <span class="material-icons">clear</span>
+          </button>
+          <button
+            mat-mini-fab
+            color="primary"
+            ngbTooltip="Wyślij"
+            *ngIf="canBeSent(order)"
+            (click)="send(order)">
+            <span class="material-icons">send</span>
+          </button>
+          <button
+            mat-mini-fab
+            color="primary"
+            ngbTooltip="Zakończ"
+            *ngIf="canBeCompleted(order)"
+            (click)="complete(order)">
+            <span class="material-icons">done</span>
+          </button>
+        </div>
+
+      </mat-expansion-panel>
+
+
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+
+

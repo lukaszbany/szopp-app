@@ -1,0 +1,6 @@
+<div *ngFor="let category of categories">
+  <a mat-list-item routerLink="/kategorie/{{category.id}}/produkty" class="sidenav-item">{{category.name}}</a>
+  <div class="ml-2">
+    <app-categories-mobile [categories]="category.childCategories"></app-categories-mobile>
+  </div>
+</div>

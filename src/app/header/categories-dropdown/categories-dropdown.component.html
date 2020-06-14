@@ -1,0 +1,104 @@
+<!--Explanation:-->
+<!--It's easy to do this by recursion, but Material Design Menu doesn't work -->
+<!--correctly in such case. Menu is filled, but submenus are not opening by hoover -->
+<!--and not closing when other submenu is clicked. Sadly I had to make it that way.-->
+<button mat-button [matMenuTriggerFor]="menu" class="btn btn-outline-light my-2 my-sm-0">Kategorie<span
+  class="material-icons">keyboard_arrow_down</span></button>
+<mat-menu #menu="matMenu" [overlapTrigger]="false">
+  <span *ngFor="let category of categories">
+
+    <span *ngIf="hasChildren(category)">
+      <button mat-menu-item [matMenuTriggerFor]="menuLevel2" routerLink="/kategorie/{{category.id}}/produkty">
+        <span>{{category.name}}</span>
+      </button>
+
+      <!--      LEVEL2-->
+      <mat-menu #menuLevel2="matMenu" [overlapTrigger]="false">
+      <span *ngFor="let categoryL2 of category.childCategories">
+
+        <span *ngIf="hasChildren(categoryL2)">
+          <button mat-menu-item color="primary" [matMenuTriggerFor]="menuLevel3"
+                  routerLink="/kategorie/{{categoryL2.id}}/produkty">
+            <span>{{categoryL2.name}}</span>
+          </button>
+
+          <!--      LEVEL3-->
+          <mat-menu #menuLevel3="matMenu" [overlapTrigger]="false">
+            <span *ngFor="let categoryL3 of categoryL2.childCategories">
+
+              <span *ngIf="hasChildren(categoryL3)">
+                <button mat-menu-item color="primary" [matMenuTriggerFor]="menuLevel4"
+                        routerLink="/kategorie/{{categoryL3.id}}/produkty">
+                  <span>{{categoryL3.name}}</span>
+                </button>
+
+                <!--      LEVEL4-->
+                <mat-menu #menuLevel4="matMenu" [overlapTrigger]="false">
+                  <span *ngFor="let categoryL4 of categoryL3.childCategories">
+
+                    <span *ngIf="hasChildren(categoryL4)">
+                      <button mat-menu-item color="primary" [matMenuTriggerFor]="menuLevel5"
+                              routerLink="/kategorie/{{categoryL4.id}}/produkty">
+                        <span>{{categoryL4.name}}</span>
+                      </button>
+
+                      <!--      LEVEL5-->
+                      <mat-menu #menuLevel5="matMenu" [overlapTrigger]="false">
+                        <span *ngFor="let categoryL5 of categoryL4.childCategories">
+                          <button mat-menu-item routerLink="/kategorie/{{categoryL5.id}}/produkty">
+                              <span>{{categoryL5.name}}</span>
+                            </button>
+                        </span>
+                      </mat-menu>
+                      <!--      LEVEL5-->
+
+                    </span>
+
+                    <span *ngIf="!hasChildren(categoryL4)">
+                      <button mat-menu-item routerLink="/kategorie/{{categoryL4.id}}/produkty">
+                        <span>{{categoryL4.name}}</span>
+                      </button>
+                    </span>
+                  </span>
+                </mat-menu>
+                <!--      LEVEL4-->
+
+              </span>
+
+              <span *ngIf="!hasChildren(categoryL3)">
+                <button mat-menu-item routerLink="/kategorie/{{categoryL3.id}}/produkty">
+                  <span>{{categoryL3.name}}</span>
+                </button>
+              </span>
+            </span>
+          </mat-menu>
+          <!--      LEVEL3-->
+
+        </span>
+
+        <span *ngIf="!hasChildren(categoryL2)">
+          <button mat-menu-item routerLink="/kategorie/{{categoryL2.id}}/produkty">
+            <span>{{categoryL2.name}}</span>
+          </button>
+        </span>
+      </span>
+    </mat-menu>
+      <!--      LEVEL2-->
+    </span>
+
+    <span *ngIf="!hasChildren(category)">
+      <button mat-menu-item routerLink="/kategorie/{{category.id}}/produkty">
+        <span>{{category.name}}</span>
+      </button>
+    </span>
+
+  </span>
+
+  <button mat-button
+          class="btn btn-outline-light my-2 my-sm-0"
+          *ngIf="categories.length === 0"
+          disabled>
+    Brak kategorii
+  </button>
+
+</mat-menu>

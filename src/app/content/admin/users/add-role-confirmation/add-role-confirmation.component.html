@@ -1,0 +1,15 @@
+<p>Czy chcesz nadać użytkownikowi rolę: {{role | role}}?</p>
+<div>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="close()">
+    Anuluj
+  </button>
+  <button
+    mat-flat-button
+    color="accent"
+    (click)="changeRole()">
+    Nadaj rolę
+  </button>
+</div>

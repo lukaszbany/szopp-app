@@ -1,0 +1,99 @@
+<nav aria-label="breadcrumb" *ngIf="parentCategory">
+  <ol class="breadcrumb">
+    <button class="mr-3"
+            mat-flat-button
+            color="primary"
+            routerLink="/admin/kategorie/{{parentCategory.parentCategoryId}}"
+            ngbTooltip="Wróć do kategorii nadrzędnej">
+      <span class="material-icons">undo</span>
+    </button>
+    <li class="breadcrumb-item" *ngFor="let category of categoryTree"
+        [class.active]="category.id === parentCategory.id">
+      {{category.name}}
+    </li>
+  </ol>
+</nav>
+
+<nav aria-label="breadcrumb" *ngIf="!parentCategory">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      Kategorie nadrzędne sklepu
+    </li>
+  </ol>
+</nav>
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">Nazwa</th>
+    <th scope="col" class="d-none d-sm-table-cell">Nadrzędna kategoria</th>
+    <th scope="col" class="d-none d-sm-table-cell">Włączona</th>
+    <th scope="col">Akcje</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let category of subcategoriesOfCurrent" [class.table-danger]="!category.active">
+    <td class="align-middle">{{category.id}}</td>
+    <td class="align-middle">{{category.name}}</td>
+    <td class="align-middle" class="d-none d-sm-table-cell">{{category.parentCategoryId}}</td>
+    <td class="align-middle" class="d-none d-sm-table-cell">
+      <span class="material-icons" *ngIf="category.active">check_box</span>
+      <span class="material-icons" *ngIf="!category.active">check_box_outline_blank</span>
+    </td>
+    <td class="align-middle">
+      <button
+        mat-mini-fab
+        color="primary"
+        *ngIf="!category.active"
+        ngbTooltip="Włącz"
+        (click)="setActive(category, true)">
+        <span class="material-icons">power_settings_new</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="accent"
+        *ngIf="category.active"
+        ngbTooltip="Wyłącz"
+        (click)="setActive(category, false)">
+        <span class="material-icons">power_settings_new</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="primary"
+        ngbTooltip="Przejdź do podkategorii"
+        routerLink="/admin/kategorie/{{category.id}}">
+        <span class="material-icons">list</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="primary"
+        ngbTooltip="Zobacz produkty"
+        routerLink="/admin/kategorie/{{category.id}}/produkty">
+        <span class="material-icons">search</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="primary"
+        ngbTooltip="Edytuj"
+        (click)="editCategory(category)">
+        <span class="material-icons">edit</span>
+      </button>
+      <button
+        mat-mini-fab
+        color="accent"
+        ngbTooltip="Usuń"
+        (click)="deleteCategory(category)">
+        <span class="material-icons">delete</span>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="bottom-space"></div>
+
+<div class="add-button">
+  <button mat-fab class="add-button" (click)="addCategory(parentCategory)" ngbTooltip="Nowa kategoria">
+    <span class="material-icons">add</span>
+  </button>
+</div>

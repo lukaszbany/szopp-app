@@ -1,0 +1,132 @@
+<div class="container">
+  <form #customerDataForm="ngForm" (ngSubmit)="submit()">
+    <h3>Moje dane:</h3>
+    <p>Na te dane zostanie wysłana przesyłka, jeśli przy finalizacji zamówienia nie zostaną podane inne.</p>
+
+
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <mat-form-field>
+            <mat-label>Login</mat-label>
+            <input matInput id="username" ngModel name="username" disabled>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-form-field>
+          <mat-label>Imię</mat-label>
+          <input matInput id="firstName" ngModel name="firstName">
+          <mat-error *ngIf="isIncorrect('firstName')">
+            {{getErrorMessage('firstName')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-form-field>
+          <mat-label>Nazwisko</mat-label>
+          <input matInput id="lastName" ngModel name="lastName">
+          <mat-error *ngIf="isIncorrect('lastName')">
+            {{getErrorMessage('lastName')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-form-field>
+          <mat-label>E-mail</mat-label>
+          <input type="email" matInput id="email" ngModel name="email">
+          <mat-error *ngIf="isIncorrect('email')">
+            {{getErrorMessage('email')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-form-field>
+          <mat-label>Telefon</mat-label>
+          <input matInput id="phone" ngModel name="phone">
+          <mat-error *ngIf="isIncorrect('phone')">
+            {{getErrorMessage('phone')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-form-field>
+          <mat-label>Kod pocztowy</mat-label>
+          <input matInput id="zipCode" ngModel name="zipCode">
+          <mat-error *ngIf="isIncorrect('zipCode')">
+            {{getErrorMessage('zipCode')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-form-field>
+          <mat-label>Miasto</mat-label>
+          <input matInput id="city" ngModel name="city">
+          <mat-error *ngIf="isIncorrect('city')">
+            {{getErrorMessage('city')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-form-field>
+          <mat-label>Ulica</mat-label>
+          <input matInput id="street" ngModel name="street">
+          <mat-error *ngIf="isIncorrect('street')">
+            {{getErrorMessage('street')}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <mat-expansion-panel disabled [(expanded)]="isCompany" class="is-company">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span [class.selected]="!isCompany">Osoba</span>
+              <mat-slide-toggle [(ngModel)]="isCompany" [ngModelOptions]="{standalone: true}"></mat-slide-toggle>
+              <span [class.selected]="isCompany">Firma</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Nazwa firmy</mat-label>
+                <input matInput id="companyName" ngModel name="companyName">
+                <mat-error *ngIf="isIncorrect('companyName')">
+                  {{getErrorMessage('companyName')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>NIP</mat-label>
+                <input matInput id="nip" ngModel name="nip">
+                <mat-error *ngIf="isIncorrect('nip')">
+                  {{getErrorMessage('nip')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </mat-expansion-panel>
+      </div>
+
+    </div>
+
+    <div>
+      <button mat-flat-button color="primary" type="submit">Zapisz dane</button>
+    </div>
+  </form>
+  <div class="mt-1">
+    <button mat-flat-button color="accent" (click)="loadCustomerData()">Resetuj</button>
+  </div>
+</div>

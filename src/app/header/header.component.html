@@ -1,0 +1,215 @@
+<nav class="navbar navbar-expand-xl navbar-dark bg-primary fixed-top nav-shadow">
+  <a class="navbar-brand" routerLink="/"><span class="material-icons brand-logo">shop</span><span class="brand-name">Szopp</span></a>
+  <ul class="navbar-nav d-none d-xl-flex">
+    <li class="nav-item">
+      <button mat-button routerLink="/"
+              routerLinkActive="bold"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="btn btn-outline-light my-2 my-sm-0">Strona główna
+      </button>
+    </li>
+    <li class="nav-item" *ngIf="isCustomer()">
+      <button mat-button routerLink="/produkty"
+              routerLinkActive="bold"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="btn btn-outline-light my-2 my-sm-0">Wszystkie produkty
+      </button>
+    </li>
+    <li class="nav-item" *ngIf="isCustomer()">
+      <app-categories-dropdown [categories]="categories" *ngIf="categories"></app-categories-dropdown>
+    </li>
+
+    <li class="nav-item" *ngIf="isAdmin()">
+      <button mat-button routerLink="/admin/uzytkownicy"
+              routerLinkActive="bold"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="btn btn-outline-light my-2 my-sm-0">Lista użytkowników
+      </button>
+    </li>
+
+    <li class="nav-item" *ngIf="isStaff()">
+      <button mat-button routerLink="/admin/kategorie"
+              routerLinkActive="bold"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="btn btn-outline-light my-2 my-sm-0">Kategorie
+      </button>
+    </li>
+    <li class="nav-item" *ngIf="isStaff()">
+      <button mat-button routerLink="/admin/produkty"
+              routerLinkActive="bold"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="btn btn-outline-light my-2 my-sm-0">Produkty
+      </button>
+    </li>
+    <li class="nav-item" *ngIf="isStaff()">
+      <button mat-button routerLink="/admin/zamowienia"
+              routerLinkActive="bold"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="btn btn-outline-light my-2 my-sm-0">Zamówienia
+      </button>
+    </li>
+    <li class="nav-item">
+      <button mat-button routerLink="/o-projekcie"
+              routerLinkActive="bold"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="btn btn-outline-light my-2 my-sm-0">O projekcie
+      </button>
+    </li>
+  </ul>
+
+
+  <ul class="navbar-nav ml-auto d-none d-xl-flex" *ngIf="isCustomer()">
+    <li class="nav-item mr-3">
+      <app-search></app-search>
+    </li>
+  </ul>
+
+  <ul class="navbar-nav d-none d-xl-flex" [class.ml-auto]="!isCustomer()">
+    <li class="nav-item" *ngIf="isCustomer()">
+      <button mat-button
+              routerLink="/koszyk"
+              class="btn btn-outline-light my-2 my-sm-0">
+        <mat-icon
+          matBadge="{{itemInCartCount}}"
+          matBadgeColor="accent"
+          matBadgePosition="above after"
+          [matBadgeHidden]="itemInCartCount === 0">shopping_cart
+        </mat-icon>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button mat-button
+              routerLink="/logowanie"
+              class="btn btn-outline-light my-2 my-sm-0"
+              *ngIf="!isLogged()">
+        <mat-icon>person</mat-icon>
+      </button>
+      <button mat-button
+              class="btn btn-outline-light my-2 my-sm-0"
+              *ngIf="isLogged()"
+              [matMenuTriggerFor]="userMenu">
+        <mat-icon>person</mat-icon>
+        <span class="username">{{userData.username}}</span>
+        <span class="material-icons">keyboard_arrow_down</span>
+      </button>
+
+      <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
+        <button mat-menu-item routerLink="/zamowienia" *ngIf="isCustomer()">Moje zamówienia</button>
+        <button mat-menu-item routerLink="/dane" *ngIf="isCustomer()">Moje dane</button>
+        <hr *ngIf="isCustomer()">
+        <button mat-menu-item (click)="logout()">Wyloguj</button>
+      </mat-menu>
+
+    </li>
+  </ul>
+
+  <button mat-stroked-button (click)="sidenav.toggle()" class="navbar-toggler">
+    <mat-icon *ngIf="!sideNavOpened">menu</mat-icon>
+    <mat-icon *ngIf="sideNavOpened">close</mat-icon>
+  </button>
+
+</nav>
+
+<mat-sidenav-container [hasBackdrop]="true" (backdropClick)="closeEverything()">
+  <mat-sidenav #sidenav mode="push" [(opened)]="sideNavOpened" fixedInViewport>
+    <mat-nav-list>
+
+      <mat-expansion-panel class="user-menu" *ngIf="isLogged()" [(expanded)]="userMenuExpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <a mat-list-item class="sidenav-item">
+              <mat-icon>person</mat-icon>
+              <span class="sidenav-icon">{{userData.username}}</span>
+            </a>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="/zamowienia" class="sidenav-item" *ngIf="isCustomer()">
+          <mat-icon>store</mat-icon>
+          <span class="sidenav-icon">Moje zamówienia</span>
+        </a>
+
+        <a mat-list-item routerLink="/dane" class="sidenav-item" *ngIf="isCustomer()">
+          <mat-icon>mail</mat-icon>
+          <span class="sidenav-icon">Moje dane</span>
+        </a>
+
+        <a mat-list-item (click)="logout()" class="sidenav-item">
+          <mat-icon>clear</mat-icon>
+          <span class="sidenav-icon">Wyloguj</span>
+        </a>
+
+        <hr>
+      </mat-expansion-panel>
+
+
+      <a mat-list-item routerLink="/logowanie" class="sidenav-item" *ngIf="!isLogged()">
+        <mat-icon>person</mat-icon>
+        <span class="sidenav-icon">Logowanie</span>
+      </a>
+
+      <a mat-list-item routerLink="/koszyk" class="sidenav-item" *ngIf="isCustomer()">
+        <mat-icon
+          matBadge="{{itemInCartCount}}"
+          matBadgeColor="accent"
+          matBadgePosition="above after"
+          [matBadgeHidden]="itemInCartCount === 0">
+          shopping_cart
+        </mat-icon>
+        <span class="sidenav-icon">Koszyk</span>
+      </a>
+
+      <a mat-list-item class="sidenav-item search" *ngIf="isCustomer()">
+        <app-search></app-search>
+      </a>
+
+      <a mat-list-item routerLink="/" class="sidenav-item">
+        <mat-icon>home</mat-icon>
+        <span class="sidenav-icon">Strona główna</span>
+      </a>
+      <a mat-list-item routerLink="/produkty" class="sidenav-item" *ngIf="isCustomer()">
+        <mat-icon>list</mat-icon>
+        <span class="sidenav-icon">Wszystkie produkty</span>
+      </a>
+
+      <mat-expansion-panel *ngIf="isCustomer()" [(expanded)]="categoriesExpanded" class="categories-menu">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <a mat-list-item class="sidenav-item">
+              <mat-icon>clear_all</mat-icon>
+              <span class="sidenav-icon">Kategorie</span>
+            </a>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <app-categories-mobile [categories]="categories"></app-categories-mobile>
+      </mat-expansion-panel>
+
+      <a mat-list-item routerLink="/admin/uzytkownicy" class="sidenav-item" *ngIf="isAdmin()">
+        <mat-icon>group</mat-icon>
+        <span class="sidenav-icon">Lista użytkowników</span>
+      </a>
+
+      <a mat-list-item routerLink="/admin/kategorie" class="sidenav-item" *ngIf="isStaff()">
+        <mat-icon>clear_all</mat-icon>
+        <span class="sidenav-icon">Kategorie</span>
+      </a>
+
+      <a mat-list-item routerLink="/admin/produkty" class="sidenav-item" *ngIf="isStaff()">
+        <mat-icon>list</mat-icon>
+        <span class="sidenav-icon">Produkty</span>
+      </a>
+
+      <a mat-list-item routerLink="/admin/zamowienia" class="sidenav-item" *ngIf="isStaff()">
+        <mat-icon>shopping_cart</mat-icon>
+        <span class="sidenav-icon">Zamówienia</span>
+      </a>
+
+      <a mat-list-item routerLink="/o-projekcie" class="sidenav-item">
+        <mat-icon>info</mat-icon>
+        <span class="sidenav-icon">O projekcie</span>
+      </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>

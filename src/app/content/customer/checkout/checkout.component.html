@@ -1,0 +1,283 @@
+<div class="container">
+  <mat-horizontal-stepper linear #stepper (selectionChange)="validateStep($event)">
+    <form #customerDataForm="ngForm">
+      <mat-step [completed]="false" [editable]="!orderCompleted" #step1>
+        <ng-template matStepLabel>
+          <span class="d-none d-md-inline">Podaj swoje dane</span>
+          <span class="d-md-none">Dane</span>
+        </ng-template>
+        <div class="justify-content-center">
+
+          <h3>Dane klienta:</h3>
+          <p>Dane osobowe klienta.</p>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Imię</mat-label>
+                <input matInput ngModel name="firstName">
+                <mat-error *ngIf="isIncorrect(customerDataForm, 'firstName')">
+                  {{getErrorMessage(customerDataForm, 'firstName')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Nazwisko</mat-label>
+                <input matInput ngModel name="lastName">
+                <mat-error *ngIf="isIncorrect(customerDataForm, 'lastName')">
+                  {{getErrorMessage(customerDataForm, 'lastName')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>E-mail</mat-label>
+                <input type="email" matInput ngModel name="email">
+                <mat-error *ngIf="isIncorrect(customerDataForm, 'email')">
+                  {{getErrorMessage(customerDataForm, 'email')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Telefon</mat-label>
+                <input matInput ngModel name="phone">
+                <mat-error *ngIf="isIncorrect(customerDataForm, 'phone')">
+                  {{getErrorMessage(customerDataForm, 'phone')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Kod pocztowy</mat-label>
+                <input matInput ngModel name="zipCode">
+                <mat-error *ngIf="isIncorrect(customerDataForm, 'zipCode')">
+                  {{getErrorMessage(customerDataForm, 'zipCode')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Miasto</mat-label>
+                <input matInput ngModel name="city">
+                <mat-error *ngIf="isIncorrect(customerDataForm, 'city')">
+                  {{getErrorMessage(customerDataForm, 'city')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Ulica</mat-label>
+                <input matInput ngModel name="street">
+                <mat-error *ngIf="isIncorrect(customerDataForm, 'street')">
+                  {{getErrorMessage(customerDataForm, 'street')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <mat-expansion-panel disabled [(expanded)]="step1IsCompany" class="is-company">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span [class.selected]="!step1IsCompany">Osoba</span>
+                    <mat-slide-toggle [(ngModel)]="step1IsCompany"
+                                      [ngModelOptions]="{standalone: true}"></mat-slide-toggle>
+                    <span [class.selected]="step1IsCompany">Firma</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+
+                <div class="row" *ngIf="step1IsCompany">
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <mat-form-field>
+                      <mat-label>Nazwa firmy</mat-label>
+                      <input matInput ngModel name="companyName">
+                      <mat-error *ngIf="isIncorrect(customerDataForm, 'companyName')">
+                        {{getErrorMessage(customerDataForm, 'companyName')}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <mat-form-field>
+                      <mat-label>NIP</mat-label>
+                      <input matInput ngModel name="nip">
+                      <mat-error *ngIf="isIncorrect(customerDataForm, 'nip')">
+                        {{getErrorMessage(customerDataForm, 'nip')}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+
+
+          <button mat-flat-button color="primary" (click)="submitCustomerData()" class="float-right">Dalej</button>
+        </div>
+      </mat-step>
+    </form>
+
+    <form #shipmentAddressForm="ngForm">
+      <mat-step [completed]="false" [editable]="!orderCompleted" #step2>
+        <ng-template matStepLabel>
+          <span class="d-none d-md-inline">Adres do wysyłki</span>
+          <span class="d-md-none">Wysyłka</span>
+        </ng-template>
+
+        <div class="justify-content-center">
+          <h3>Adres do wysyłki:</h3>
+          <p>Jeśli inny niż dane klienta.</p>
+
+          <div class="row">
+            <div class="col-12">
+              <span [class.selected]="!differentShipmentAddress">Taki sam </span>
+              <mat-slide-toggle [(ngModel)]="differentShipmentAddress"
+                                [ngModelOptions]="{standalone: true}"></mat-slide-toggle>
+              <span [class.selected]="differentShipmentAddress"> Inny</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Imię</mat-label>
+                <input matInput ngModel name="firstName" [disabled]="!differentShipmentAddress">
+                <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'firstName')">
+                  {{getErrorMessage(shipmentAddressForm, 'firstName')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Nazwisko</mat-label>
+                <input matInput ngModel name="lastName" [disabled]="!differentShipmentAddress">
+                <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'lastName')">
+                  {{getErrorMessage(shipmentAddressForm, 'lastName')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>E-mail</mat-label>
+                <input type="email" matInput ngModel name="email" [disabled]="!differentShipmentAddress">
+                <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'email')">
+                  {{getErrorMessage(shipmentAddressForm, 'email')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Telefon</mat-label>
+                <input matInput ngModel name="phone" [disabled]="!differentShipmentAddress">
+                <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'phone')">
+                  {{getErrorMessage(shipmentAddressForm, 'phone')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Kod pocztowy</mat-label>
+                <input matInput ngModel name="zipCode" [disabled]="!differentShipmentAddress">
+                <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'zipCode')">
+                  {{getErrorMessage(shipmentAddressForm, 'zipCode')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Miasto</mat-label>
+                <input matInput ngModel name="city" [disabled]="!differentShipmentAddress">
+                <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'city')">
+                  {{getErrorMessage(shipmentAddressForm, 'city')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <mat-form-field>
+                <mat-label>Ulica</mat-label>
+                <input matInput ngModel name="street" [disabled]="!differentShipmentAddress">
+                <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'street')">
+                  {{getErrorMessage(shipmentAddressForm, 'street')}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <mat-expansion-panel disabled [(expanded)]="step2isCompany" class="is-company">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span [class.selected]="!step2isCompany" [class.disabled]="!differentShipmentAddress">Osoba</span>
+                    <mat-slide-toggle [(ngModel)]="step2isCompany" [class.disabled]="!differentShipmentAddress"
+                                      [ngModelOptions]="{standalone: true}" [disabled]="!differentShipmentAddress"></mat-slide-toggle>
+                    <span [class.selected]="step2isCompany" [class.disabled]="!differentShipmentAddress">Firma</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="row" *ngIf="step2isCompany">
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <mat-form-field>
+                      <mat-label>Nazwa firmy</mat-label>
+                      <input matInput ngModel name="companyName" [disabled]="!differentShipmentAddress">
+                      <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'companyName')">
+                        {{getErrorMessage(shipmentAddressForm, 'companyName')}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <mat-form-field>
+                      <mat-label>NIP</mat-label>
+                      <input matInput ngModel name="nip" [disabled]="!differentShipmentAddress">
+                      <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'nip')">
+                        {{getErrorMessage(shipmentAddressForm, 'nip')}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </mat-expansion-panel>
+            </div>
+
+          </div>
+
+          <button mat-raised-button color="accent" (click)="submitShipmentAddress()" class="float-right">
+            Zakończ zamówienie
+          </button>
+
+        </div>
+
+      </mat-step>
+    </form>
+
+    <mat-step>
+      <ng-template matStepLabel>
+        <span class="d-none d-md-inline">Zamówienie złożone</span>
+        <span class="d-md-none">Koniec</span>
+      </ng-template>
+      <app-cart-summary></app-cart-summary>
+    </mat-step>
+  </mat-horizontal-stepper>
+
+</div>

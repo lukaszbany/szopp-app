@@ -1,0 +1,15 @@
+<p>Czy chcesz usunąć użytkownika {{user.username}}?</p>
+<div>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="close()">
+    Anuluj
+  </button>
+  <button
+    mat-flat-button
+    color="accent"
+    (click)="deleteUser()">
+    Usuń użytkownika
+  </button>
+</div>

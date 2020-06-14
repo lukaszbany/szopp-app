@@ -1,0 +1,120 @@
+<div class="container mt-5">
+  <h1 class="mb-5">Twój koszyk:</h1>
+  <div *ngIf="!isCartLoaded">
+    <app-spinner></app-spinner>
+  </div>
+  <div *ngIf="isCartLoaded && cart.orderItems.length > 0">
+    <table class="table d-none d-md-table">
+      <thead>
+      <tr>
+        <th scope="col" class="product-picture align-middle">Zdjęcie</th>
+        <th scope="col" class="align-middle">Produkt</th>
+        <th scope="col" class="align-middle">Ilość</th>
+        <th scope="col" class="align-middle">Cena</th>
+        <th scope="col" class="align-middle">Razem</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let orderItem of cart.orderItems">
+        <td class="align-middle">
+          <div class="product-image">
+            <img src="{{getImagePath(orderItem)}}" alt="" class="product-image">
+          </div>
+        </td>
+        <td class="align-middle">{{orderItem.product.name}}</td>
+        <td class="align-middle">
+          <span class="product-quantity">{{orderItem.quantity}}</span>
+          <div class="tooltip-wrapper" placement="top"
+               ngbTooltip="Dostępne: {{orderItem.product.inStock}}">
+            <button mat-mini-fab color="primary" (click)="addToCart(orderItem)"
+                    [disabled]="isEveryPieceInCartAlready(orderItem)"
+                    class="btn btn-primary cart-operation">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <button mat-mini-fab color="accent" (click)="removeFromCart(orderItem)"
+                  class="btn btn-danger cart-operation">
+            <mat-icon>remove</mat-icon>
+          </button>
+        </td>
+        <td class="align-middle">{{orderItem.price | pln}}</td>
+        <td class="align-middle">{{orderItem.totalPrice | pln}}</td>
+      </tr>
+      <tr class="table-active">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Razem:</td>
+        <td>{{cart.totalPrice | pln}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+<!--    MOBILE TABLE-->
+    <table class="table d-md-none">
+      <thead>
+      <tr>
+        <th scope="col" class="align-middle">Produkt</th>
+        <th scope="col" class="align-middle d-none d-sm-table-cell">Ilość</th>
+        <th scope="col" class="align-middle d-none d-sm-table-cell">Cena</th>
+        <th scope="col" class="align-middle d-sm-table-cell text-center">Ilość/Cena</th>
+        <th scope="col" class="align-middle">Razem</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let orderItem of cart.orderItems">
+        <td class="align-middle">
+          {{orderItem.product.name}}
+        </td>
+        <td class="align-middle text-center d-none d-sm-table-cell">
+          <div class="product-quantity text-center">{{orderItem.quantity}}</div>
+          <div class="tooltip-wrapper" placement="top"
+               ngbTooltip="Dostępne: {{orderItem.product.inStock}}">
+            <button mat-mini-fab color="primary" (click)="addToCart(orderItem)"
+                    [disabled]="isEveryPieceInCartAlready(orderItem)"
+                    class="btn btn-primary cart-operation d-block mt-2">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <div class="tooltip-wrapper">
+            <button mat-mini-fab color="accent" (click)="removeFromCart(orderItem)"
+                    class="btn btn-danger cart-operation d-block mt-2">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </div>
+        </td>
+        <td class="align-middle d-sm-none text-center">
+          <div>{{orderItem.quantity}} x</div>
+          <div>{{orderItem.price}}</div>
+          <div>
+            <button mat-icon-button color="primary" (click)="addToCart(orderItem)"
+                    [disabled]="isEveryPieceInCartAlready(orderItem)"
+                    class="mt-2">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="removeFromCart(orderItem)"
+                    class="mt-2">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </div>
+        </td>
+        <td class="align-middle d-none d-sm-table-cell">{{orderItem.price | pln}}</td>
+        <td class="align-middle">{{orderItem.totalPrice | pln}}</td>
+      </tr>
+      <tr class="table-active">
+        <td></td>
+        <td class="d-none d-sm-table-cell"></td>
+        <td>Razem:</td>
+        <td>{{cart.totalPrice | pln}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+
+    <button mat-raised-button color="primary" [disabled]="!canCheckout()" routerLink="/finalizuj" class="float-right">Finalizuj zamówienie</button>
+  </div>
+  <div *ngIf="isCartLoaded && cart.orderItems.length == 0">
+    <h3>W koszyku nic jeszcze nie ma :(</h3>
+    <img src="assets/img/sadcat.png" class="sad-cat">
+  </div>
+</div>

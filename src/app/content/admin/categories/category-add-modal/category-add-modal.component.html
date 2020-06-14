@@ -1,0 +1,72 @@
+<p>Dodaj nową kategorię</p>
+
+<form #categoryAddForm="ngForm">
+  <table>
+
+    <tr>
+      <td>
+        <mat-form-field>
+          <mat-label>Nazwa kategorii</mat-label>
+          <input matInput name="name" [(ngModel)]="category.name">
+          <mat-error *ngIf="isIncorrect('name')">
+            {{getErrorMessage('name')}}
+          </mat-error>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <mat-form-field>
+          <mat-label>Opis kategorii</mat-label>
+          <textarea
+            matInput
+            name="description"
+            [(ngModel)]="category.description"
+            draggable="false">
+          </textarea>
+          <mat-error *ngIf="isIncorrect('description')">
+            {{getErrorMessage('description')}}
+          </mat-error>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="w-25">
+        <mat-slide-toggle name="isActive" [(ngModel)]="category.active"></mat-slide-toggle>
+        <span [class.selected]="category.active"> Aktywna</span>
+      </td>
+      <td class="w-75">
+        <mat-form-field>
+          <input type="text"
+                 placeholder="Nadrzędna"
+                 aria-label="Number"
+                 matInput
+                 [formControl]="parentCategoryControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let cat of filteredCategories | async" [value]="cat">
+              {{cat.name}} <span class="badge badge-pill badge-primary">ID: {{cat.id}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </td>
+    </tr>
+
+  </table>
+  <div class="button-wrapper">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="close()">
+      Anuluj
+    </button>
+    <button
+      mat-flat-button
+      color="accent"
+      (click)="submit()">
+      Zapisz dane
+    </button>
+  </div>
+</form>

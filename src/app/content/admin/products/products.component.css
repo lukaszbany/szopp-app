@@ -1,0 +1,65 @@
+td button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+div.add-button {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  z-index: 1;
+}
+
+@media (max-width: 500px) {
+  div.add-button {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+button.add-button {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+button:focus {
+  outline: 0;
+}
+
+ol.breadcrumb {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  line-height: 36px;
+}
+
+ol button {
+  height: 36px;
+}
+
+th button {
+  height: 36px;
+}
+
+input.search-input {
+  margin-left: 10px;
+}
+
+button.search-query {
+  height: 30px;
+}
+
+mat-form-field {
+  margin-left: 10px;
+}
+
+mat-form-field.category-filter {
+  margin-right: 10px;
+  width: 260px;
+}
+
+input.category-filter {
+  width: 220px;
+}
+
+div.bottom-space {
+  height: 80px;
+}

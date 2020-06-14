@@ -1,0 +1,20 @@
+td button {
+  margin-right: 10px;
+}
+
+button:focus {
+  outline: 0;
+}
+
+mat-form-field.status-filter {
+  height: 20px;
+}
+
+::ng-deep mat-expansion-panel.mat-expansion-panel.order-details .mat-expansion-panel-body {
+  padding: 0 0 !important;
+}
+
+p.order-details,
+ul.order-details {
+  padding: 0 5px;
+}

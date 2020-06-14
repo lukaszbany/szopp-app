@@ -1,0 +1,43 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">Nazwa użytkownika</th>
+    <th scope="col">Rola</th>
+    <th scope="col">Nadaj rolę</th>
+    <th scope="col">Usuń</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users" [class.table-success]="isCurrent(user)">
+    <td>{{user.id}}</td>
+    <td>{{user.username}}</td>
+    <td>{{user.roleNames[0] | role}}</td>
+    <td>
+      <button
+        mat-flat-button
+        color="accent"
+        [disabled]="hasRole(user, 'ADMIN') || isCurrent(user)"
+        (click)="addRoleDialog(user,'ADMIN')">
+        Admin
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="hasRole(user, 'STAFF') || isCurrent(user)"
+        (click)="addRoleDialog(user,'STAFF')">
+        Pracownik
+      </button>
+    </td>
+    <td>
+      <button
+        mat-mini-fab
+        color="accent"
+        [disabled]="isCurrent(user)"
+        (click)="deleteUserDialog(user)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>

@@ -1,0 +1,16 @@
+<p>Czy chcesz usunąć kategorię {{category.name}} <span class="badge badge-pill badge-primary">ID: {{category.id}}</span>?</p>
+<p>Wszystkie podrzędne kategorie i produkty również zostaną usunięte!</p>
+<div>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="close()">
+    Anuluj
+  </button>
+  <button
+    mat-flat-button
+    color="accent"
+    (click)="deleteCategory()">
+    Usuń kategorię
+  </button>
+</div>

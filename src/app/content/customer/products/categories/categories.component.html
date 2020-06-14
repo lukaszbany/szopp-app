@@ -1,0 +1,6 @@
+<li class="nav-item" *ngFor="let category of categories">
+  <button mat-button routerLink="/kategorie/{{category.id}}/produkty" routerLinkActive="bold" [routerLinkActiveOptions]="{exact: true}">{{category.name}}</button>
+  <div class="ml-4">
+    <app-categories [categories]="category.childCategories"></app-categories>
+  </div>
+</li>

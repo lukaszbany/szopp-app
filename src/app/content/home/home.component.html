@@ -1,0 +1,13 @@
+<div class="background">
+  <div class="home d-flex align-items-center justify-content-center">
+    <div class="content">
+      <h1>Szopp</h1>
+      <h2 *ngIf="isCustomer()">Twój sklep internetowy</h2>
+      <h2 *ngIf="userHasRole('ADMIN')">Panel administratora</h2>
+      <h2 *ngIf="userHasRole('STAFF')">Panel pracownika sklepu</h2>
+      <div class="button-wrapper d-flex justify-content-center" *ngIf="isCustomer()">
+        <button class="btn btn-lg btn-light" routerLink="/produkty">Zacznij zakupy</button>
+      </div>
+    </div>
+  </div>
+</div>

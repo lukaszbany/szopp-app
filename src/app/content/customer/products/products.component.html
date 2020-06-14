@@ -1,0 +1,70 @@
+<div class="row h-100 w-100">
+  <div class="p-3 categories border-right d-none d-xl-block">
+    <h4>Kategorie:</h4>
+    <ul class="nav flex-column">
+      <app-categories [categories]="categories"></app-categories>
+    </ul>
+  </div>
+  <div class="col-12 col-xl-10 p-3 products" *ngIf="productLoading">
+    <app-spinner></app-spinner>
+  </div>
+
+  <div class="col-12 col-xl-10 p-3 products" *ngIf="!productLoading">
+    <div *ngIf="shouldShowSearchAlert() && products.length > 0" class="alert alert-success" role="alert">
+      Znalezione produkty związane z "{{searchQuery}}": {{products.length}}.
+    </div>
+    <div *ngIf="shouldShowSearchAlert() && products.length == 0" class="alert alert-danger" role="alert">
+      Nie znaleziono produktów związanych z "{{searchQuery}}".
+    </div>
+
+    <nav aria-label="breadcrumb" *ngIf="shouldShowBreadcrumb()">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item" *ngFor="let parent of categoryTree"><a
+          routerLink="/kategorie/{{parent.id}}/produkty">{{parent.name}}</a></li>
+      </ol>
+    </nav>
+
+    <div *ngFor="let product of products" class="border rounded product float-left">
+      <a routerLink="/produkty/{{product.id}}">
+        <div class="img-fluid product-image d-flex align-items-center">
+          <img src="{{getImagePath(product)}}"
+               class="product-image"
+               alt="{{getImageDescription(product)}}">
+        </div>
+      </a>
+      <div class="title">
+        <a routerLink="/produkty/{{product.id}}">
+          <h2>{{product.name}}</h2>
+        </a>
+      </div>
+      <div class="price">
+        <span class="price">{{product.price | pln}}</span>
+        <span class="cart float-right">
+           <div class="tooltip-wrapper" placement="top"
+                ngbTooltip="Dostępne: {{product.inStock}}">
+                       <button *ngIf="!isInCart(product)"
+                               mat-flat-button color="primary"
+                               [disabled]="isEveryPieceInCartAlready(product)"
+                               (click)="addToCart(product)"
+                               class="btn btn-primary"><mat-icon>add_shopping_cart</mat-icon> Do koszyka</button>
+           </div>
+
+          <span *ngIf="isInCart(product)">
+            <span class="in-cart-count">{{countInCart(product)}}</span>
+            <div class="tooltip-wrapper" placement="top"
+                 ngbTooltip="Dostępne: {{product.inStock}}">
+              <button mat-mini-fab color="primary" (click)="addToCart(product)"
+                      [disabled]="isEveryPieceInCartAlready(product)"
+                      class="btn btn-primary cart-operation"><mat-icon>add</mat-icon></button>
+            </div>
+            <button mat-mini-fab color="accent" (click)="removeFromCart(product)"
+                    class="btn btn-danger cart-operation"><mat-icon>remove</mat-icon></button>
+          </span>
+        </span>
+      </div>
+      <div class="description">
+        {{product.shortDescription}}
+      </div>
+    </div>
+  </div>
+</div>
