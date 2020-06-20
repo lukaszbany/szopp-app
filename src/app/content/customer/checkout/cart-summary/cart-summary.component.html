@@ -7,8 +7,8 @@
     <thead>
     <tr>
       <th scope="col" class="align-middle">Produkt</th>
-      <th scope="col" class="align-middle d-none d-sm-tab">Ilość</th>
-      <th scope="col" class="align-middle d-none d-sm-tab">Cena</th>
+      <th scope="col" class="align-middle d-none d-sm-table-cell">Ilość</th>
+      <th scope="col" class="align-middle d-none d-sm-table-cell">Cena</th>
       <th scope="col" class="align-middle d-sm-none">Ilość/Cena</th>
       <th scope="col" class="align-middle">Razem</th>
     </tr>
@@ -16,10 +16,10 @@
     <tbody>
     <tr *ngFor="let orderItem of cart.orderItems">
       <td class="align-middle">{{orderItem.product.name}}</td>
-      <td class="align-middle d-none d-sm-tab">
+      <td class="align-middle d-none d-sm-table-cell">
         <span class="product-quantity">{{orderItem.quantity}}</span>
       </td>
-      <td class="align-middle d-none d-sm-tab">{{orderItem.price | pln}}</td>
+      <td class="align-middle d-none d-sm-table-cell">{{orderItem.price | pln}}</td>
       <td class="align-middle d-sm-none">
         <div>{{orderItem.quantity}} x</div>
         <div>{{orderItem.price | pln}}</div>
@@ -28,7 +28,7 @@
     </tr>
     <tr class="table-active">
       <td></td>
-      <td class="d-none d-sm-tab"></td>
+      <td class="d-none d-sm-table-cell"></td>
       <td>Razem:</td>
       <td>{{cart.totalPrice | pln}}</td>
     </tr>
