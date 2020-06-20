@@ -13,6 +13,7 @@ import {OrderStatus} from '../../../model/order/order.status.model';
 })
 export class AdminOrdersComponent implements OnInit {
 
+  loading: boolean = false;
   orders: Order[];
   status: string;
 
@@ -61,14 +62,17 @@ export class AdminOrdersComponent implements OnInit {
   }
 
   send(order) {
+    this.loading = true;
     this.changeStatus(order, OrderStatus.SENT);
   }
 
   cancel(order) {
+    this.loading = true;
     this.changeStatus(order, OrderStatus.CANCELED);
   }
 
   complete(order) {
+    this.loading = true;
     this.changeStatus(order, OrderStatus.COMPLETED);
   }
 
@@ -78,8 +82,10 @@ export class AdminOrdersComponent implements OnInit {
       .subscribe(success => {
         this.filterStatus();
         this.snackBar.open(success.message, null, {duration: 3000});
+        this.loading = false;
       }, error => {
         this.snackBar.open(error.error.message, null, {duration: 3000});
+        this.loading = false;
       });
   }
 

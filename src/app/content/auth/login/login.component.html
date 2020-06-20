@@ -20,6 +20,11 @@
     </mat-form-field>
   </div>
   <div>
-    <button mat-flat-button color="primary" type="submit">Zaloguj</button>
+    <button
+      mat-flat-button
+      color="primary"
+      [class.spinner]="loading"
+      [disabled]="loading"
+      type="submit">Zaloguj</button>
   </div>
 </form>

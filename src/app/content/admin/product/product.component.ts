@@ -23,6 +23,7 @@ import {ValidationError} from '../../../model/error/validation.error.model';
 })
 export class AdminProductComponent implements OnInit {
 
+  loading: boolean = false;
   returnUrl: string;
   isLoaded: boolean;
 
@@ -141,6 +142,7 @@ export class AdminProductComponent implements OnInit {
   }
 
   submit(stay: boolean) {
+    this.loading = true;
     if (this.newProduct) {
       this.addProduct(stay);
     } else {
@@ -171,9 +173,11 @@ export class AdminProductComponent implements OnInit {
       .subscribe(product => {
         this.reloadPageOrGetBack(stay, product);
         this.snackBar.open('Produkt został dodany', null, {duration: 3000});
+        this.loading = false;
       }, error => {
         this.handleError(error);
         this.snackBar.open(error.error.message, null, {duration: 3000});
+        this.loading = false;
       });
   }
 
@@ -214,9 +218,11 @@ export class AdminProductComponent implements OnInit {
 
         this.ngOnInit();
         this.snackBar.open(success.message, null, {duration: 3000});
+        this.loading = false;
       }, error => {
         this.handleError(error);
         this.snackBar.open(error.error.message, null, {duration: 3000});
+        this.loading = false;
       });
   }
 

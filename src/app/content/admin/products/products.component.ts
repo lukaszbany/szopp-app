@@ -19,6 +19,7 @@ import {EditProduct} from '../../../model/product/edit.product.model';
 })
 export class AdminProductsComponent implements OnInit {
 
+  loading: boolean = false;
   categoryTree: Category[];
   categoryId: number;
   category: Category;
@@ -169,6 +170,7 @@ export class AdminProductsComponent implements OnInit {
   }
 
   setActive(product: Product, active: boolean) {
+    this.loading = true;
     let editProduct = this.createEditProductActivation(product, active);
 
     this.productService.editProduct(editProduct)
@@ -176,8 +178,10 @@ export class AdminProductsComponent implements OnInit {
         this.loadCategories();
         this.loadProducts();
         this.snackBar.open(active ? 'Kategoria została włączona' : 'Kategoria została wyłączona', null, {duration: 3000});
+        this.loading = false;
       }, error => {
         this.snackBar.open(error.error.message, null, {duration: 3000});
+        this.loading = false;
       });
   }
 

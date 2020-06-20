@@ -262,7 +262,13 @@
 
           </div>
 
-          <button mat-raised-button color="accent" (click)="submitShipmentAddress()" class="float-right">
+          <button
+            mat-raised-button
+            color="accent"
+            [class.spinner]="loading"
+            [disabled]="loading"
+            (click)="submitShipmentAddress()"
+            class="float-right">
             Zakończ zamówienie
           </button>
 

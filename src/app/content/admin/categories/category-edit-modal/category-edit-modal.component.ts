@@ -18,6 +18,7 @@ export class CategoryEditModalComponent implements OnInit {
   @ViewChild('categoryEditForm') categoryEditForm: NgForm;
   categoryName: string;
 
+  loading: boolean = false;
   parentCategoryControl = new FormControl();
   filteredCategories: Observable<Category[]>;
 
@@ -55,6 +56,7 @@ export class CategoryEditModalComponent implements OnInit {
   }
 
   submit() {
+    this.loading = true;
     this.data.category.parentCategoryId = this.parentCategoryControl.value ? this.parentCategoryControl.value.id : null;
 
     this.categoryService
@@ -64,6 +66,7 @@ export class CategoryEditModalComponent implements OnInit {
       }, error => {
         this.handleError(error);
         this.snackBar.open(error.error.message, null, {duration: 3000});
+        this.loading = false;
       });
   }
 

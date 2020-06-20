@@ -125,6 +125,8 @@
         color="primary"
         *ngIf="!product.active"
         ngbTooltip="Włącz"
+        [class.spinner]="loading"
+        [disabled]="loading"
         (click)="setActive(product, true)">
         <span class="material-icons">power_settings_new</span>
       </button>
@@ -133,6 +135,8 @@
         color="accent"
         *ngIf="product.active"
         ngbTooltip="Wyłącz"
+        [class.spinner]="loading"
+        [disabled]="loading"
         (click)="setActive(product, false)">
         <span class="material-icons">power_settings_new</span>
       </button>

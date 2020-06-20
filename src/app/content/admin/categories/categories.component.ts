@@ -19,6 +19,7 @@ const deactivateMessage = 'Kategoria została wyłączona';
 })
 export class AdminCategoriesComponent implements OnInit {
 
+  loading: boolean = false;
   categoryId: number;
   parentCategory: Category;
   subcategoriesOfCurrent: Category[] = [];
@@ -91,7 +92,7 @@ export class AdminCategoriesComponent implements OnInit {
   editCategory(category: Category) {
     let availableAsParent = this.getAllCategoriesWithoutCurrent(category);
     let editCategory = this.createEditCategory(category);
-    const dialogRef = this.operEditCategoryModal(editCategory, availableAsParent);
+    const dialogRef = this.openEditCategoryModal(editCategory, availableAsParent);
 
     dialogRef.afterClosed().subscribe(success => {
       if (success) {
@@ -103,7 +104,7 @@ export class AdminCategoriesComponent implements OnInit {
     });
   }
 
-  private operEditCategoryModal(editCategory: EditCategory, availableAsParent: Category[]) {
+  private openEditCategoryModal(editCategory: EditCategory, availableAsParent: Category[]) {
     return this.dialog.open(CategoryEditModalComponent, {
       data: {category: editCategory, availableAsParent: availableAsParent},
       disableClose: true,
@@ -150,14 +151,17 @@ export class AdminCategoriesComponent implements OnInit {
   }
 
   setActive(category: Category, active: boolean) {
+    this.loading = true;
     let editCategory = this.createEditActiveField(category, active);
 
     this.categoryService.editCategory(editCategory)
       .subscribe(() => {
         this.loadCategories();
         this.snackBar.open(this.getActivateMessage(active), null, {duration: 3000});
+        this.loading = false;
       }, error => {
         this.snackBar.open(error.error.message, null, {duration: 3000});
+        this.loading = false;
       });
 
   }

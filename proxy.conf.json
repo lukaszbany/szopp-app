@@ -1,13 +1,13 @@
 {
   "/api": {
-    "target": "http://localhost:48080",
+    "target": "http://localhost:8080",
     "secure": false,
     "pathRewrite": {
       "^/api": ""
     }
   },
   "/images": {
-    "target": "http://localhost:48080/images",
+    "target": "http://localhost:8080/images",
     "secure": false,
     "pathRewrite": {
       "^/images": ""

@@ -5,7 +5,6 @@ import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ValidationErrorHandler} from '../../../service/utils/validation.error.handler';
 import {CartService} from '../../../service/cart/cart.service';
-import {A11yModule} from '@angular/cdk/a11y';
 
 
 @Component({
@@ -15,6 +14,7 @@ import {A11yModule} from '@angular/cdk/a11y';
 })
 export class LoginComponent implements OnInit {
 
+  loading: boolean = false;
   @ViewChild('loginForm') loginForm: NgForm;
 
   constructor(private authService: AuthService,
@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.loading = true;
     const username = this.loginForm.value['username'];
     const password = this.loginForm.value['password'];
 
@@ -46,6 +47,7 @@ export class LoginComponent implements OnInit {
       this._snackBar.open(error.error.message, null, {duration: 3000});
       ValidationErrorHandler.saveErrors(this.loginForm, error.error);
     }
+    this.loading = false;
   }
 
   isIncorrect(field: string): boolean {

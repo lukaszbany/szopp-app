@@ -12,6 +12,7 @@ import {ValidationErrorHandler} from '../../../service/utils/validation.error.ha
 })
 export class RegisterComponent implements OnInit {
 
+  loading: boolean = false;
   @ViewChild('registerForm') registerForm: NgForm;
 
   constructor(private authService: AuthService,
@@ -23,6 +24,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    this.loading = true;
     const username = this.registerForm.value['username'];
     const password = this.registerForm.value['password'];
     const confirmPassword = this.registerForm.value['confirmPassword'];
@@ -39,6 +41,7 @@ export class RegisterComponent implements OnInit {
       this._snackBar.open(error.error.message, null, {duration: 3000});
       ValidationErrorHandler.saveErrors(this.registerForm, error.error);
     }
+    this.loading = false;
   }
 
   isIncorrect(field: string): boolean {
