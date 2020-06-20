@@ -30,6 +30,8 @@
                 <button
                   mat-flat-button
                   color="accent"
+                  [class.spinner]="loading"
+                  [disabled]="loading"
                   class="d-block d-sm-inline-block right-button"
                   (click)="submit(true)">
                   Zastosuj
@@ -37,6 +39,8 @@
                 <button
                   mat-flat-button
                   color="accent"
+                  [class.spinner]="loading"
+                  [disabled]="loading"
                   class="d-block d-sm-inline-block right-button"
                   (click)="submit(false)">
                   Zapisz i wyjdź

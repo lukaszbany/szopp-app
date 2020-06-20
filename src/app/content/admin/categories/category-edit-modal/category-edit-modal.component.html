@@ -71,6 +71,8 @@
     <button
       mat-flat-button
       color="accent"
+      [class.spinner]="loading"
+      [disabled]="loading"
       (click)="submit()">
       Zapisz dane
     </button>

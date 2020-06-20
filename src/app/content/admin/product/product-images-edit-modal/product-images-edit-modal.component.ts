@@ -148,7 +148,11 @@ export class ProductImagesEditModalComponent implements OnInit {
         this.ngOnInit();
         this.snackBar.open(success.message, null, {duration: 3000});
       }, error => {
-        this.snackBar.open(error.error.message, null, {duration: 3000});
+        if (error.error) {
+          this.snackBar.open(error.error.message, null, {duration: 3000});
+        } else {
+          this.snackBar.open(error, null, {duration: 3000});
+        }
       });
   }
 }

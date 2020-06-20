@@ -1,18 +1,23 @@
 <table class="table">
   <thead>
   <tr>
-    <th scope="col">ID</th>
+    <th scope="col" class="d-none d-sm-table-cell">ID</th>
     <th scope="col">Nazwa użytkownika</th>
-    <th scope="col">Rola</th>
+    <th scope="col" class="d-none d-sm-table-cell">Rola</th>
     <th scope="col">Nadaj rolę</th>
     <th scope="col">Usuń</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let user of users" [class.table-success]="isCurrent(user)">
-    <td>{{user.id}}</td>
-    <td>{{user.username}}</td>
-    <td>{{user.roleNames[0] | role}}</td>
+    <td class="d-none d-sm-table-cell">{{user.id}}</td>
+    <td>
+      <div class="d-sm-none">
+        <span class="badge badge-pill badge-primary">ID: {{user.id}}</span>
+      </div>
+      {{user.username}}
+      <div class="d-sm-none">({{user.roleNames[0] | role}})</div></td>
+    <td class="d-none d-sm-table-cell">{{user.roleNames[0] | role}}</td>
     <td>
       <button
         mat-flat-button

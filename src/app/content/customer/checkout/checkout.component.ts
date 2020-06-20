@@ -18,6 +18,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class CheckoutComponent implements OnInit {
 
+  loading: boolean = false;
   @ViewChild('stepper') stepper: MatStepper;
 
   @ViewChild('step1') step1: MatStep;
@@ -126,8 +127,11 @@ export class CheckoutComponent implements OnInit {
   }
 
   submitShipmentAddress() {
+    this.loading = true;
+
     if (!this.differentShipmentAddress) {
       this.checkout(null);
+      return;
     }
 
     const firstName = this.shipmentAddressForm.value['firstName'];
@@ -153,6 +157,7 @@ export class CheckoutComponent implements OnInit {
         this.step2.editable = false;
         this.step2.completed = true;
         this.stepper.selectedIndex = 2;
+        this.loading = false;
       }, error => {
         if (error.error) {
           if (error.error.validationErrors) {
@@ -164,6 +169,7 @@ export class CheckoutComponent implements OnInit {
             this.snackBar.open(error.error.message, null, {duration: 4000});
           }
         }
+        this.loading = false;
       });
   }
 }

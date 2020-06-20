@@ -26,7 +26,7 @@
 
     <div *ngFor="let product of products" class="border rounded product float-left">
       <a routerLink="/produkty/{{product.id}}">
-        <div class="img-fluid product-image d-flex align-items-center">
+        <div class="img-fluid product-image d-flex align-items-center justify-content-center">
           <img src="{{getImagePath(product)}}"
                class="product-image"
                alt="{{getImageDescription(product)}}">

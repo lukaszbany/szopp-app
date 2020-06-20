@@ -46,6 +46,8 @@
         color="primary"
         *ngIf="!category.active"
         ngbTooltip="Włącz"
+        [class.spinner]="loading"
+        [disabled]="loading"
         (click)="setActive(category, true)">
         <span class="material-icons">power_settings_new</span>
       </button>
@@ -54,6 +56,8 @@
         color="accent"
         *ngIf="category.active"
         ngbTooltip="Wyłącz"
+        [class.spinner]="loading"
+        [disabled]="loading"
         (click)="setActive(category, false)">
         <span class="material-icons">power_settings_new</span>
       </button>

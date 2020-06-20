@@ -91,6 +91,8 @@
         mat-mini-fab
         color="warn"
         ngbTooltip="Anuluj"
+        [class.spinner]="loading"
+        [disabled]="loading"
         *ngIf="canBeCanceled(order)"
         (click)="cancel(order)">
         <span class="material-icons">clear</span>
@@ -99,6 +101,8 @@
         mat-mini-fab
         color="primary"
         ngbTooltip="Wyślij"
+        [class.spinner]="loading"
+        [disabled]="loading"
         *ngIf="canBeSent(order)"
         (click)="send(order)">
         <span class="material-icons">send</span>
@@ -107,6 +111,8 @@
         mat-mini-fab
         color="primary"
         ngbTooltip="Zakończ"
+        [class.spinner]="loading"
+        [disabled]="loading"
         *ngIf="canBeCompleted(order)"
         (click)="complete(order)">
         <span class="material-icons">done</span>
