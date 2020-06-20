@@ -45,7 +45,7 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
               <mat-form-field>
                 <mat-label>Telefon</mat-label>
-                <input matInput ngModel name="phone">
+                <input matInput ngModel name="phone" [textMask]="{mask: phoneMask}">
                 <mat-error *ngIf="isIncorrect(customerDataForm, 'phone')">
                   {{getErrorMessage(customerDataForm, 'phone')}}
                 </mat-error>
@@ -57,7 +57,7 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
               <mat-form-field>
                 <mat-label>Kod pocztowy</mat-label>
-                <input matInput ngModel name="zipCode">
+                <input matInput ngModel name="zipCode" [textMask]="{mask: postalCodeMask}">
                 <mat-error *ngIf="isIncorrect(customerDataForm, 'zipCode')">
                   {{getErrorMessage(customerDataForm, 'zipCode')}}
                 </mat-error>
@@ -183,7 +183,7 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
               <mat-form-field>
                 <mat-label>Telefon</mat-label>
-                <input matInput ngModel name="phone" [disabled]="!differentShipmentAddress">
+                <input matInput ngModel name="phone" [disabled]="!differentShipmentAddress" [textMask]="{mask: phoneMask}">
                 <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'phone')">
                   {{getErrorMessage(shipmentAddressForm, 'phone')}}
                 </mat-error>
@@ -195,7 +195,7 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
               <mat-form-field>
                 <mat-label>Kod pocztowy</mat-label>
-                <input matInput ngModel name="zipCode" [disabled]="!differentShipmentAddress">
+                <input matInput ngModel name="zipCode" [disabled]="!differentShipmentAddress" [textMask]="{mask: postalCodeMask}">
                 <mat-error *ngIf="isIncorrect(shipmentAddressForm, 'zipCode')">
                   {{getErrorMessage(shipmentAddressForm, 'zipCode')}}
                 </mat-error>

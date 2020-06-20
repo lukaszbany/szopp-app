@@ -32,6 +32,17 @@ export class CheckoutComponent implements OnInit {
 
   orderCompleted: boolean = false;
 
+  public phoneMask = [
+    /\d/, /\d/, /\d/,
+    /\d/, /\d/, /\d/,
+    /\d/, /\d/, /\d/
+  ];
+  public postalCodeMask = [
+    /\d/, /\d/,
+    '-',
+    /\d/, /\d/, /\d/
+  ];
+
   constructor(private router: Router,
               private cartService: CartService,
               private customerService: CustomerService,

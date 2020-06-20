@@ -16,6 +16,16 @@ export class CustomerDataComponent implements OnInit {
   @ViewChild('customerDataForm') customerDataForm: NgForm;
   formMessage: string;
   isCompany = false;
+  public phoneMask = [
+    /\d/, /\d/, /\d/,
+    /\d/, /\d/, /\d/,
+    /\d/, /\d/, /\d/
+  ];
+  public postalCodeMask = [
+    /\d/, /\d/,
+    '-',
+    /\d/, /\d/, /\d/
+  ];
 
   constructor(private customerService: CustomerService, private snackBar: MatSnackBar) { }
 

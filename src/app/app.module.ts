@@ -73,7 +73,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {CategoriesMobileComponent} from './header/categories-mobile/categories-mobile.component';
 import {AppRoutingModule} from './app-routing.module';
-
+import {TextMaskModule} from 'angular2-text-mask';
 
 registerLocaleData(localePL);
 
@@ -151,7 +151,8 @@ registerLocaleData(localePL);
     MatPaginatorModule,
     MatSidenavModule,
     MatListModule,
-    AppRoutingModule
+    AppRoutingModule,
+    TextMaskModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
