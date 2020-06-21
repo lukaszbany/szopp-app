@@ -3,12 +3,6 @@ div.product-images {
   height: 80%;
 }
 
-@media (min-width: 768px) {
-  div.product-image-wrapper {
-    height: 100%;
-  }
-}
-
 div.product-image {
   max-height: 50%;
 }
