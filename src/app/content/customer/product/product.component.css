@@ -3,14 +3,20 @@ div.product-images {
   height: 80%;
 }
 
+@media (min-width: 768px) {
+  div.product-image-wrapper {
+    height: 100%;
+  }
+}
+
 div.product-image {
-  height: 500px;
+  max-height: 50%;
 }
 
 img.product-image {
   align-self:flex-start;
   max-height: 100%;
-  max-width: 50%;
+  max-width: 100%;
 }
 
 div.row {
@@ -47,6 +53,13 @@ div.description {
 div.product-thumbnail {
   width: 120px;
   height: 120px;
+}
+
+@media (max-width: 767px) {
+  div.product-thumbnail {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 img.product-thumbnail {

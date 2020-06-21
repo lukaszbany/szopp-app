@@ -16,10 +16,6 @@ mat-form-field {
   width: 100%;
 }
 
-input {
-  width: 50%;
-}
-
 div.button-wrapper {
   float: right;
 }
