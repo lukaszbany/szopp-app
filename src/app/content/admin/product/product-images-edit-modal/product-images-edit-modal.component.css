@@ -41,13 +41,13 @@
   margin-top: -40px;
   margin-left: -35px;
   font-size: 8vh;
-  opacity: 40%;
+  opacity: 0.4;
   overflow: hidden;
   height: 80px;
 }
 
 .material-icons.delete-icon.over-delete-field {
-  opacity: 80%;
+  opacity: 0.8;
 }
 
 .cdk-drag-preview {
